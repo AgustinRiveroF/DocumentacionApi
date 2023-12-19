@@ -10,6 +10,10 @@ export default {
     secret_jwt: process.env.SECRET_KEY_JWT,
     google_secret: process.env.GOOGLE_CLIENT_SECRET,
     google_id: process.env.GOOGLE_CLIENT_ID,
+    admin_email: process.env.ADMIN_EMAIL,
+    admin_password: process.env.ADMIN_PASSWORD,
+    nodemailer_user: process.env.NODEMAILER_USER,
+    nodemailer_password: process.env.NODEMAILER_PASSWORD
 };
 
 

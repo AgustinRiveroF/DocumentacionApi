@@ -1,4 +1,5 @@
 import { cartsModel } from "../models/cart.models.js";
+import { usersModel } from "../models/users.model.js";
 
 class CartsManager {
   async createCart() {
@@ -15,6 +16,38 @@ class CartsManager {
       throw error;
     }
   }
+
+  async addProductToCartWithId(cartId, productId, quantity) {
+    try {
+        const cart = await cartsModel.findOne({ _id: cartId });
+
+        if (!cart) {
+            throw new Error(`Cart with id ${cartId} not found`);
+        }
+
+        const productIndex = cart.products.findIndex(
+            (p) => p.product && p.product.equals(productId)
+        );
+
+        if (productIndex === -1) {
+            if (!cart.products) {
+                cart.products = [];
+            }
+            if (!productId) {
+                throw new Error("ProductId is required");
+            }
+            cart.products.push({ productId, quantity: quantity });
+        } else {
+            cart.products[productIndex].quantity += quantity;
+        }
+
+        await cart.save();
+        return cart;
+    } catch (error) {
+        console.log("No se puedo agregar");
+        throw error;
+    }
+}
 
   async addProductToCart(idCart, idProduct) {
     const cart = await cartsModel.findById(idCart);
@@ -46,7 +79,7 @@ class CartsManager {
       const cart = await cartsModel.findById(cartId);
 
       if (!cart) {
-        throw new Error("Cart not found");
+        throw new Error("Remove product to cart not found");
       }
 
       const productIndex = cart.products.findIndex(product => product.product && product.product.toString() === productId);

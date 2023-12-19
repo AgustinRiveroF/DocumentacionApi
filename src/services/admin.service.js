@@ -1,8 +1,8 @@
-import { productManager } from "../daos/managers/product.dao.js";
+import { productManager } from "../dao/managers/product.dao.js";
 
 const adminService = {
-  addProduct: async ({ product_name, product_price, product_description }) => {
-    if (!product_name || !product_price || !product_description) {
+  addProduct: async ({ product_name, product_price, product_description, stock }) => {
+    if (!product_name || !product_price || !product_description || !stock) {
       throw new Error("Todos los campos son obligatorios");
     }
 
@@ -10,6 +10,7 @@ const adminService = {
       product_name,
       product_price,
       product_description,
+      stock,
     });
 
     return newProduct;

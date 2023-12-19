@@ -53,40 +53,6 @@ toggleChatButton.addEventListener("click", () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  const addToCartButtons = document.querySelectorAll(".add-to-cart");
-
-  addToCartButtons.forEach(button => {
-    button.addEventListener("click", async () => {
-      const productId = button.getAttribute("data-id");
-
-      try {
-        const createCartResponse = await fetch(`/api/carts`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({})
-        });
-
-        const { cartId } = await createCartResponse.json();
-
-        await fetch(`/api/carts/${cartId}/add-product`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ productId, quantity: 1 })
-        });
-
-        alert("Product added to cart!");
-      } catch (error) {
-        console.error("Error adding product to cart:", error);
-      }
-    });
-  });
-});
-
-document.addEventListener("DOMContentLoaded", () => {
   const viewCartButton = document.getElementById("view-cart");
 
   viewCartButton.addEventListener("click", async () => {
@@ -110,6 +76,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+
 document.addEventListener('DOMContentLoaded', function () {
   const adminToggle = document.getElementById('admin-toggle');
   const adminContent = document.querySelector('.admin-content');

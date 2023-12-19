@@ -1,12 +1,12 @@
 import express from 'express';
 import productsRouter from './routes/products.router.js'
-import config from "./daos/config/config.js"
+import config from "./dao/config/config.js"
 import { engine } from "express-handlebars";
 import handlebars from 'express-handlebars';
 import { Server } from "socket.io";
-import { __dirname } from "./utils.js";
+import { __dirname } from "./utils/utils.js";
 import carritosRouter from './routes/carts.router.js';
-import { messageModel } from './daos/models/message.models.js';
+import { messageModel } from './dao/models/message.models.js';
 import viewsRouter from "./routes/views.router.js"
 import bodyParser from 'body-parser';
 import sessionRouter from './routes/sessions.router.js'
@@ -21,7 +21,7 @@ import adminRouter from './routes/admin.router.js'
 import './passport.js'
 import passport from 'passport';
 import dotenv from 'dotenv'
-
+import isAuthenticated from './middlewares/autheticate.middleware.js';
 
 dotenv.config();
 
@@ -77,7 +77,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-
 // Handlebars
 app.engine(
   "handlebars",
@@ -97,12 +96,6 @@ app.engine("handlebars", engine());
 
 // 
 
-/* const authenticateUser = (req, res, next) => {
-  if (req.isAuthenticated()) {
-      return next();
-  }
-  res.redirect("/views/login"); 
-};  */
 
 // Ruta Login
 app.post("/api/sessions/login", passport.authenticate('login', {
@@ -112,13 +105,12 @@ app.post("/api/sessions/login", passport.authenticate('login', {
 
 
 // Rutas para el back
-
   
 // Ruta productos
-app.use("/api/products", productsRouter);
+app.use("/api/products",productsRouter);
 
 // Ruta para carritos
-app.use('/api/carts', carritosRouter);
+app.use('/api/carts',carritosRouter);
 
 // Ruta Login
 app.use("/api/sessions", sessionRouter);
@@ -137,6 +129,7 @@ app.use("/views", viewsRouter);
 // Ruta cookies
 app.use("/cookie", cookieRouter);
 
+// Ruta 
 app.use("/logout", logoutRouter);
 
 

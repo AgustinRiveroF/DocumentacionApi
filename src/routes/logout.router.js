@@ -1,13 +1,3 @@
-/* // logout.router.js
-import { Router } from 'express';
-import logoutController from '../controllers/logout.controller.js';
-
-const router = Router();
-
-router.get('/', logoutController.logoutUser);
-
-export default router; */
-
 import { Router } from "express";
 
 const router = Router();

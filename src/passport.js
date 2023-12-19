@@ -1,10 +1,11 @@
 // passport.js
 import passport from "passport";
-import { usersManager } from "./daos/managers/users.dao.js";
-import { usersModel } from "./daos/models/users.model.js";
+import { ObjectId } from 'mongodb';
+import { usersManager } from "./dao/managers/users.dao.js";
+import { usersModel } from "./dao/models/users.model.js";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as GithubStrategy } from "passport-github2";
-import { compareData, hashData } from "./utils.js";
+import { compareData, hashData } from "./utils/utils.js";
 
 
 // LOCAL
@@ -49,9 +50,10 @@ passport.use(
 
       try {
         console.log("3 strategy");
+        const idAdmin = "123"
         if (email === "adminCoder@coder.com" && password === "adminCod3r123") {
           let role = "admin";
-          return done(null, { email, role });
+          return done(null, { email, role, idAdmin });
         }
 
         const user = await usersManager.findByEmail(email);
@@ -67,7 +69,12 @@ passport.use(
         }
         console.log("6 strategy");
         let role = "usuario";
-        return done(null, { email, first_name: user.first_name, role });
+        return done(null, {
+          cartID:user.cartId,
+          id:user._id,
+          last_name: user.last_name,
+          email, first_name: user.first_name,
+          role });
         //return done(null, user)
       } catch (error) {
         return done(error);
@@ -111,6 +118,7 @@ passport.use(
           email: profile._json.email,
           password: "ads12c1h%/123DS13*çs",
           isGithub: true,
+          cartID: new ObjectId(),
         };
 
         const createdUser = await usersManager.createOne(infoUser);
@@ -132,22 +140,60 @@ passport.use(
 
 // SERIALIZE && DESERIALIZE
 
+/* passport.serializeUser((user, done) => {
+  console.log('Serialize User:', user);
+  const idAdmin = "123"
+  done(null, {
+    cartID: user.cartID ? user.cartID.toString() : undefined,  La que funciona
+    id: user.id || idAdmin,
+    email: user.email, 
+    first_name: user.first_name, 
+    last_name: user.last_name,  
+    role: user.role 
+  });
+}); */
+
+
 passport.serializeUser((user, done) => {
   console.log('Serialize User:', user);
-  done(null, { email: user.email, first_name: user.first_name , last_name: user.last_name , role: user.role });
+  const idAdmin = "123"
+  const serializedUser = {
+    id: user.id || idAdmin,
+    email: user.email, 
+    first_name: user.first_name, 
+    last_name: user.last_name,  
+    role: user.role 
+  };
+
+  if (user.cartID) {
+    serializedUser.cartID = user.cartID.toString();
+  }
+
+  done(null, serializedUser);
 });
 
 
 passport.deserializeUser(async (serializedUser, done) => {
-  //console.log('Deserialize User:', serializedUser);
+  console.log('Deserialize User:', serializedUser);
   try {
     const foundUser = await usersManager.findByEmail(serializedUser.email);
-    if (!foundUser) {
-      return done(null, false);
+    const idAdmin = "123";
+    if (!foundUser || !foundUser.cartID) {
+      return done(null, idAdmin || foundUser.id );
     }
 
-    return done(null, foundUser);
+    const cartID = new ObjectId(foundUser.cartID);
+
+    return done(null, {
+      cartID,
+      id: foundUser.id,
+      email: foundUser.email,
+      first_name: foundUser.first_name,
+      last_name: foundUser.last_name,
+      role: foundUser.role
+    });
   } catch (error) {
     done(error);
   }
 });
+

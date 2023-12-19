@@ -1,10 +1,9 @@
-import { usersManager } from '../daos/managers/users.dao.js';
-import { compareData } from '../utils.js';
+import usersRepository from '../dao/repositories/users.repository.js';
+import { compareData } from '../utils/utils.js';
 
 const sessionService = {
   getUserByEmail: async (email) => {
-    const user = await usersManager.findByEmail(email);
-    return user;
+    return usersRepository.getByEmail(email);
   },
 
   loginUser: async (email, password) => {
@@ -29,6 +28,7 @@ const sessionService = {
     }
     return null;
   },
+  
 };
 
 export default sessionService;

@@ -1,9 +1,12 @@
 import productsService from '../services/products.sevice.js';
+import productsRepository from '../dao/repositories/products.repository.js';
+import { usersModel } from '../dao/models/users.model.js';
+import { usersManager } from '../dao/managers/users.dao.js';
 
 const productsController = {
   getProducts: async (req, res) => {
     try {
-      if (!req.session.passport || !req.session.passport.user || !req.session) {
+      if (!req.session.passport || !req.session.passport.user || !req.session || !req.session.passport.user.email) {
         return res.redirect('/views/login');
       }
 
@@ -15,7 +18,9 @@ const productsController = {
         query,
       };
 
-      const products = await productsService.getProducts(options);
+      //const products = await productsService.getProducts(options);
+
+      const products = await productsRepository.getAll(options);
 
       const totalProducts = products.length;
       const totalPages = totalProducts > 0 ? Math.ceil(totalProducts / limit) : 1;
@@ -26,29 +31,43 @@ const productsController = {
       const prevLink = hasPrevPage ? `/api/products?limit=${limit}&page=${prevPage}&sort=${sort}` : null;
       const nextLink = hasNextPage ? `/api/products?limit=${limit}&page=${nextPage}&sort=${sort}` : null;
 
-      const { first_name, last_name, email } = req.session.passport.user || {};
+      const { cartID, id, first_name, last_name, email, role } = req.session.passport.user || {};
 
-      const userRole = req.session.passport.user === 'adminCoder@coder.com' ? 'admin' : 'usuario';
+      const userRole = req.session.passport.user.email === 'adminCoder@coder.com' ? 'admin' : 'usuario';
+
 
       const userData = {
+        cartID,
+        id,
         first_name,
         last_name,
         email,
+        role,
       };
 
-      res.render('products', {
-        user: userData,
-        role: userRole,
-        products,
-        totalPages,
-        prevPage,
-        nextPage,
-        page,
-        hasPrevPage,
-        hasNextPage,
-        prevLink,
-        nextLink,
-      });
+      console.log("Este es el userData:", userData);
+
+      if (userRole === 'admin') {
+        return res.render('admin', {
+          user: userData,
+          role: userRole,
+        });
+      } else {
+        res.render('products', {
+          user: userData,
+          role: userRole,
+          products,
+          totalPages,
+          prevPage,
+          nextPage,
+          page,
+          hasPrevPage,
+          hasNextPage,
+          prevLink,
+          nextLink,
+        });
+      }
+
     } catch (error) {
       res.status(500).json({ status: 'error', message: error.message });
     }
@@ -57,7 +76,9 @@ const productsController = {
   getProductById: async (req, res) => {
     try {
       const { pid } = req.params;
-      const product = await productsService.getProductById(pid);
+
+      //const product = await productsService.getProductById(pid);
+      const product = await productsRepository.getById(pid);
 
       if (!product) {
         return res.status(404).json({ status: 'error', message: 'Product not found' });
@@ -73,14 +94,16 @@ const productsController = {
   createProduct: async (req, res) => {
     try {
       const { first_name, last_name, email } = req.session.user || {};
-      const { product_name, product_price, product_description } = req.body;
+      const { product_name, product_price, product_description, stock } = req.body;
 
-      const createProduct = await productsService.createProduct({
+      const createProduct = await productsRepository.create({
         product_name,
         product_price,
+        stock: 10 ,
         product_description,
         createdBy: { first_name, last_name, email },
       });
+
 
       return res.render('admin', { Message: 'Producto Agregado' });
     } catch (error) {
@@ -91,7 +114,9 @@ const productsController = {
   deleteProduct: async (req, res) => {
     try {
       const { productId } = req.params;
-      const deletedProduct = await productsService.deleteProduct(productId);
+      
+      //const deletedProduct = await productsService.deleteProduct(productId);
+      const deletedProduct = await productsRepository.deleteById(productId);
 
       if (!deletedProduct) {
         return res.status(404).json({ status: 'error', message: 'Product not found' });
@@ -103,6 +128,29 @@ const productsController = {
       res.status(500).json({ status: 'error', message: 'Internal Server Error' });
     }
   },
+
+  addToCart: async (req, res) => {
+    try {
+      console.log('Contenido de req.session.passport:', req.session.passport);
+      
+      const { pid } = req.params;
+      const { user } = req.session.passport;
+
+      const userId = user._id;
+      const productId = pid;
+      const quantity = 1;
+
+      const addToCartResponse = await productsRepository.addToCart(userId, productId, quantity);
+
+      console.log("Producto Agregado",addToCartResponse);
+      res.redirect('/api/products');
+    } catch (error) {
+      console.error('Error al agregar producto al carrito:', error);
+      res.status(500).json({ status: 'error', message: error.message });
+    }
+  },
 };
+
+
 
 export default productsController;

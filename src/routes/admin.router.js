@@ -1,19 +1,15 @@
 import { Router } from "express";
 import adminController from "../controllers/admin.controller.js";
+import { isAdmin } from "../middlewares/adminUser.middlewares.js";
 
 const router = Router();
 
-// Endpoints Frontend
 
-/* router.get("/", (req, res) =>{
-    res.render("admin")
-}); */
+// Endpoints Backend && Endpoint protegidos por roles 
 
-
-// Endpoints Backend
-router.post("/admin/add-product", adminController.addProduct);
-router.put("/update-product/:productId", adminController.updateProduct);
-router.post("/update-product", adminController.updateProductWithId);
-router.post("/delete-product", adminController.deleteProduct);
+router.post("/admin/add-product", isAdmin ,adminController.addProduct);
+router.put("/update-product/:productId", isAdmin ,adminController.updateProduct);
+router.post("/update-product", isAdmin ,adminController.updateProductWithId);
+router.post("/delete-product", isAdmin ,adminController.deleteProduct);
 
 export default router;

@@ -1,31 +1,28 @@
-// products.service.js
-import { productManager } from '../daos/managers/product.dao.js';
+import { productManager } from '../dao/managers/product.dao.js';
+import { productModel } from '../dao/models/product.model.js';
+import { cartsModel } from '../dao/models/cart.models.js';
+import { usersModel } from '../dao/models/users.model.js';
+import productsRepository from '../dao/repositories/products.repository.js';
 
 const productsService = {
   getProducts: async (options) => {
-    let products;
-
-    if (options.sort === 'asc') {
-      products = await productManager.findAllSortedAscending(options);
-    } else if (options.sort === 'desc') {
-      products = await productManager.findAllSortedDescending(options);
-    } else {
-      products = await productManager.findAll(options);
-    }
-
-    return products;
+    return productsRepository.getAll(options);
   },
 
   getProductById: async (productId) => {
-    return await productManager.findOneById(productId);
+    return productsRepository.getById(productId);
   },
 
   createProduct: async (productData) => {
-    return await productManager.createOne(productData);
+    return productsRepository.create(productData);
   },
 
   deleteProduct: async (productId) => {
-    return await productManager.deleteProduct(productId);
+    return productsRepository.deleteById(productId);
+  },
+
+  addToCart: async (userId, productId, quantity) => {
+    return productsRepository.addToCart(userId, productId, quantity);
   },
 };
 

@@ -1,24 +1,30 @@
 import mongoose from "mongoose";
 
 const cartsSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: 'Users',
+    unique: true,
+  },
+
   products: [
     {
-      product: {
+      productId: {
         type: mongoose.SchemaTypes.ObjectId,
-        ref: "Product",
+        ref: 'Product',
+        required: true,
       },
       quantity: {
         type: Number,
+        default: 1,
       },
       _id: false,
     },
   ],
-});
+}).set('strictPopulate', false);
 
 
-cartsSchema.methods.populateProducts = async function () {
-  await this.populate("products.product").execPopulate();
-};
+
 
 export const cartsModel = mongoose.model("Carts", cartsSchema);
 
