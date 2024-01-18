@@ -6,6 +6,7 @@ import { usersModel } from "./dao/models/users.model.js";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as GithubStrategy } from "passport-github2";
 import { compareData, hashData } from "./utils/utils.js";
+import { logger } from "./utils/logger.js";
 
 
 // LOCAL
@@ -42,14 +43,14 @@ passport.use(
   new LocalStrategy(
     { usernameField: "email" },
     async (email, password, done) => {
-      console.log('1 strategy ');
+      logger.info('1 strategy ')
       if (!email || !password) {
-        console.log("2 strategy");
+        logger.info('2 strategy ')
         return done(null, false, { message: 'Campos incorrectos' });
       }
 
       try {
-        console.log("3 strategy");
+        logger.info('3 strategy ')
         const idAdmin = "123"
         if (email === "adminCoder@coder.com" && password === "adminCod3r123") {
           let role = "admin";
@@ -58,16 +59,16 @@ passport.use(
 
         const user = await usersManager.findByEmail(email);
         if (!user) {
-          console.log("4 strategy");
+          logger.info('4 strategy ')
           return done(null, false, { message: 'Usuario no encontrado' });
         }
 
         const isPasswordValid = await compareData(password, user.password);
         if (!isPasswordValid) {
-          console.log('5 strategy');
+          logger.info('5 strategy ')
           return done(null, false, { message: 'Contraseña no válida' });
         }
-        console.log("6 strategy");
+        logger.info('6 strategy ')
         let role = "usuario";
         return done(null, {
           cartID:user.cartId,
@@ -97,7 +98,7 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        //console.log('Paso 1: GitHub strategy called');
+        //logger.info('Paso 1: GitHub strategy called');
 
         //const userDB = await usersManager.findByEmail(profile.emails[0].value);
 
@@ -141,7 +142,7 @@ passport.use(
 // SERIALIZE && DESERIALIZE
 
 /* passport.serializeUser((user, done) => {
-  console.log('Serialize User:', user);
+  logger.info('Serialize User:', user);
   const idAdmin = "123"
   done(null, {
     cartID: user.cartID ? user.cartID.toString() : undefined,  La que funciona
@@ -155,7 +156,7 @@ passport.use(
 
 
 passport.serializeUser((user, done) => {
-  console.log('Serialize User:', user);
+  logger.warning('Serialize User:', user);
   const idAdmin = "123"
   const serializedUser = {
     id: user.id || idAdmin,
@@ -174,7 +175,7 @@ passport.serializeUser((user, done) => {
 
 
 passport.deserializeUser(async (serializedUser, done) => {
-  console.log('Deserialize User:', serializedUser);
+  //logger.info('Deserialize User:', serializedUser);
   try {
     const foundUser = await usersManager.findByEmail(serializedUser.email);
     const idAdmin = "123";

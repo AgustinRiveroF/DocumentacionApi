@@ -1,0 +1,20 @@
+{
+  message: 'Conectado al puerto 8080',
+  level: 'info',
+  timestamp: '2024-01-17T07:03:56.763Z'
+}
+{
+  message: 'Conectado a la base de datos',
+  level: 'info',
+  timestamp: '2024-01-17T07:03:58.677Z'
+}
+{
+  message: 'Conectado al puerto 8080',
+  level: 'info',
+  timestamp: '2024-01-17T07:05:57.998Z'
+}
+{
+  message: 'Conectado a la base de datos',
+  level: 'info',
+  timestamp: '2024-01-17T07:05:59.910Z'
+}

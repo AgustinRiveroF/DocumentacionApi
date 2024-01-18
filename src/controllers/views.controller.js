@@ -12,6 +12,11 @@ const viewsController = {
   renderProfile: (req, res) => {
     viewsService.renderProfile(req, res);
   },
+
+  loggerTest: (req, res) => {
+    viewsService.loggerTest(req, res);
+  }
+
 };
 
 export default viewsController;

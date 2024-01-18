@@ -1,1 +1,3 @@
+// Para loggerTest usar /views/loggerTest
+
 // Nada por aquí...

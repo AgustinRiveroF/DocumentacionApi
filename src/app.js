@@ -21,7 +21,7 @@ import adminRouter from './routes/admin.router.js'
 import './passport.js'
 import passport from 'passport';
 import dotenv from 'dotenv'
-import isAuthenticated from './middlewares/autheticate.middleware.js';
+import { logger } from './utils/logger.js';
 
 dotenv.config();
 
@@ -64,7 +64,7 @@ app.use(
       mongoUrl: URI,
     }),
     secret: "secretSession",
-    cookie: { maxAge: 900000 },
+    cookie: { maxAge: 1800000 },
     resave: false,
     saveUninitialized: false,
   })
@@ -133,21 +133,20 @@ app.use("/cookie", cookieRouter);
 app.use("/logout", logoutRouter);
 
 
-
 // Puerto
 
 const PORT = config.port;
 
 
 const httpServer = app.listen(PORT, () => {
-  console.log(`Conectado al puerto ${PORT}`);
+  logger.info(`Conectado al puerto ${PORT}`);
 });
 
 const socketServer = new Server(httpServer);
 const messages = [];
 
 socketServer.on("connection", (socket) => {
-  console.log(`Cliente conectado: ${socket.id}`);
+  logger.info(`Cliente conectado: ${socket.id}`);
 
   socket.on("newUser", (user) => {
     socket.broadcast.emit("userConnected", user);

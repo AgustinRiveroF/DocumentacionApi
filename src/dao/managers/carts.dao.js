@@ -1,3 +1,4 @@
+import { logger } from "../../utils/logger.js";
 import { cartsModel } from "../models/cart.models.js";
 import { usersModel } from "../models/users.model.js";
 import mongoose from "mongoose";
@@ -47,7 +48,7 @@ class CartsManager {
       await cart.save();
       return cart;
     } catch (error) {
-      console.log("No se puedo agregar");
+      logger.info("No se puedo agregar");
       throw error;
     }
   }
@@ -102,7 +103,7 @@ class CartsManager {
   }
 
   async updateCart(cartId, products) {
-    console.log('updateCart function called');
+    logger.info('updateCart function called');
     try {
       const productsArray = Array.isArray(products) ? products : [products];
   
@@ -114,17 +115,18 @@ class CartsManager {
 
       const isProductIdValid = productsArray.every(product => {
         const isValid = product._id !== undefined && product._id !== null;
-        console.log('isValid:', isValid);
-        console.log('product:', product);
+
+        logger.info(`isValid: ${isValid}`);
+        logger.info(`product: ${product}`);
+
         if (!isValid) {
           console.error(`Invalid productId for product: ${JSON.stringify(product)}`);
         }
         return isValid;
       });
       
-  
-      console.log('isProductIdValid:', isProductIdValid);
-      console.log('cart.products:', cart.products);
+      logger.info(`isProductIdValid: ${isProductIdValid}`);
+      logger.info(`cart.products: ${cart.products}`);
   
       if (!isProductIdValid) {
         throw new Error("ProductId is required for all products");
@@ -139,7 +141,7 @@ class CartsManager {
   
       await cart.save();
   
-      console.log('Cart after update:', cart);
+      logger.info(`Cart after update:${cart}`);
   
       return cart;
     } catch (error) {

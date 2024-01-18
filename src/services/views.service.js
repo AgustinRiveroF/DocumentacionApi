@@ -1,3 +1,6 @@
+import { logger } from "../utils/logger.js";
+
+
 const viewsService = {
     renderLogin: (req, res) => {
       if (req.session.user) {
@@ -17,6 +20,17 @@ const viewsService = {
       }
       res.render('profile', { user: req.user });
     },
+
+    loggerTest: (req, res) =>{
+      logger.info('Información de prueba');
+      logger.warning('Advertencia de prueba');
+      logger.error('Error de prueba');
+      logger.fatal('Fatal de prueba');
+      logger.http('Http de prueba');
+      logger.debug('Debug de prueba');
+      
+      res.send('Logs generados en la consola, verificar la salida');
+    }
   };
   
   export default viewsService;

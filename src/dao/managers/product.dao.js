@@ -1,4 +1,6 @@
+import { logger } from "../../utils/logger.js";
 import { productModel } from "../models/product.model.js";
+
 
 class ProductManager {
     async findAll(options = {}) {
@@ -26,7 +28,7 @@ class ProductManager {
             const response = await productModel.create(obj);
             return response;
         } catch (error) {
-            console.log(error);
+            logger.error(error);
             throw new Error(`Error creating product: ${error.message}`);
         }
     }

@@ -2,6 +2,7 @@ import productsService from '../services/products.sevice.js';
 import productsRepository from '../dao/repositories/products.repository.js';
 import { usersModel } from '../dao/models/users.model.js';
 import { usersManager } from '../dao/managers/users.dao.js';
+import { logger } from '../utils/logger.js';
 
 const productsController = {
   getProducts: async (req, res) => {
@@ -45,7 +46,7 @@ const productsController = {
         role,
       };
 
-      console.log("Este es el userData:", userData);
+      logger.info("Este es el userData:", userData);
 
       if (userRole === 'admin') {
         return res.render('admin', {
@@ -131,7 +132,7 @@ const productsController = {
 
   addToCart: async (req, res) => {
     try {
-      console.log('Contenido de req.session.passport:', req.session.passport);
+      logger.info('Contenido de req.session.passport:', req.session.passport);
       
       const { pid } = req.params;
       const { user } = req.session.passport;
@@ -142,7 +143,8 @@ const productsController = {
 
       const addToCartResponse = await productsRepository.addToCart(userId, productId, quantity);
 
-      console.log("Producto Agregado",addToCartResponse);
+      logger.info(`Producto Agregado: ${addToCartResponse}`)
+
       res.redirect('/api/products');
     } catch (error) {
       console.error('Error al agregar producto al carrito:', error);

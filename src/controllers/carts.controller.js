@@ -7,6 +7,7 @@ import Ticket from "../dao/models/ticket.model.js";
 import passport from "passport";
 import '../passport.js'
 import { sessionInfo } from "../middlewares/session.middleware.js";
+import { logger } from "../utils/logger.js";
 
 
 function generateUniqueCode() {
@@ -42,10 +43,10 @@ const cartController = {
     
     try {
       const userId = req.session.passport.user.id;
-      console.log(userId);
+      logger.info(`${userId}`);
       const cart = await cartsModel.findOne({ userId })  //.populate('products.productId');
 
-      console.log('Contenido del carrito:', cart);
+      logger.info(`Contenido del carrito: ${cart}`);
 
 
       if (!cart) {
@@ -99,9 +100,7 @@ const cartController = {
       const { cartId } = req.params;
       const { productId, quantity } = req.body;
 
-      console.log("cartId:", cartId);
-      console.log("productId:", productId);
-      console.log("quantity:", quantity);
+      logger.info(`Producto agregado: cartId: ${cartId}, productId: ${productId}, quantity: ${quantity}`);
 
       if (!cartId) {
         return res.status(400).json({ status: 'error', message: 'Cart ID is required in controllers' });
@@ -112,7 +111,6 @@ const cartController = {
       }
 
       const cart = await cartService.addProductToCartWithId(cartId, productId, quantity);
-      console.log("Contiene");
       res.status(200).json({ cart });
     } catch (error) {
       console.error("The error is",error);

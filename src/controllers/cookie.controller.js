@@ -1,5 +1,6 @@
 // cookie.controller.js
 import cookieService from '../services/cookie.service.js';
+import { logger } from '../utils/logger.js';
 
 const cookieController = {
   setSession: (req, res) => {
@@ -9,7 +10,7 @@ const cookieController = {
   },
 
   viewCookie: (req, res) => {
-    console.log(req.session);
+    logger.info(req.session);
     res.send('View cookie');
   },
 };

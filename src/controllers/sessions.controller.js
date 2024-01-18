@@ -6,8 +6,18 @@ import { transporter } from '../utils/nodemailer.js';
 import { cartsModel } from '../dao/models/cart.models.js';
 import currentDTO from '../dao/dto/current.dto.js';
 import usersRepository from '../dao/repositories/users.repository.js';
+import { client } from '../utils/twilio.js';
+import config from '../dao/config/config.js';
+import { logger } from '../utils/logger.js';
 
 const router = Router();
+
+function generarNumerosAleatorios() {
+  const numerosAleatorios = Array.from({ length: 5 }, () => Math.floor(Math.random() * 10));
+  return numerosAleatorios.join('');
+}
+
+const resultados = generarNumerosAleatorios();
 
 const sessionsController = {
   getUser: (req, res) => {
@@ -46,6 +56,9 @@ const sessionsController = {
         }
 
         const { first_name, last_name, email } = req.body;
+        
+        // NODEMAILER
+
         const mailOptions = {
           from: 'FastDelivery',
           to: email,
@@ -53,6 +66,16 @@ const sessionsController = {
           html: `<h1>Bienvenido ${first_name}! a Fast Delivery</h1><h2>Tu aventura esta recien comenzando!</h2><h3>Ante todo, gracias por unirte a nosotros</h3><p>Vamos a estar facilitando la manera en la que haces tus compras</p><p>Ya sea<ul><li>Supermercados</li><li>Tiendas</li><li>Restaurantes</li></ul></p><h4>Te invitamos a seguir explorando nuestra app para disfrutar todas nuestras ofertas</h4>`,
         };
         await transporter.sendMail(mailOptions);
+
+        // TWILIO
+
+        const twilioOptions = {
+          body: `TU CODIGO ES ${resultados}`,
+          to: 'whatsapp:+5493512877467',
+          from: config.twilio_whatsapp_number,
+        };
+        await client.messages.create(twilioOptions);
+
 
         return res.redirect('/views/login');
       });
@@ -78,7 +101,7 @@ const sessionsController = {
       }
 
       req.session.passport.user = user;
-      console.log('Redirigiendo desde sessions controller');
+      logger.info('Redirigiendo desde sessions controller');
       res.redirect('/api/products');
     } catch (error) {
       console.error('Error en la ruta de login:', error);
