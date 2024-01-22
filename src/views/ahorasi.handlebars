@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recover Password</title>
+  <style>
+    body {
+            background-color: #292c3e;
+            color: #eaff6a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            border: 1px solid black;
+            border-radius: 5px;
+            background-color: #1c1f30;
+            padding: 3rem;
+            box-shadow: 5px 6px 20px 15px #888888;
+        }
+
+        input {
+            margin-top: 10px;
+            padding: 10px;
+            width: -webkit-fill-available;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            align-content: center;
+            justify-content: center;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: xx-large;
+            font-weight: 100;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 5px;
+            background-color: #1c1f30;
+            color: #eaff6a;
+            width: -webkit-fill-available;
+        }
+        p{
+          color: red;
+        }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <form >
+      <h1>Recover Password</h1>
+      <input type="email" id="email" name="email" placeholder="Enter your email" required>
+      <input type="password" id="newPassword" name="newPassword" placeholder="Enter new password" required>
+      <input type="text" id="codeGenerado" name="codeGenerado" placeholder="Enter your code">
+      <p>Codigo incorrecto</p>
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+</body>
+</html>

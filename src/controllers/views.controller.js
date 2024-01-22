@@ -15,8 +15,23 @@ const viewsController = {
 
   loggerTest: (req, res) => {
     viewsService.loggerTest(req, res);
-  }
+  },
 
+  forgottenPassword: (req, res) => {
+    viewsService.forgottenPassword(req, res);
+  },
+
+  recoverPassword: (req, res) => {
+    viewsService.recoverPassword(req, res);
+  },
+
+  recoverPasswordWithEmail: (req, res) => {
+    viewsService.recoverPasswordWithEmail(req, res);
+  },
+
+  ahorasi: (req, res) => {
+    viewsService.ahorasi(req, res);
+  },
 };
 
 export default viewsController;

@@ -33,7 +33,8 @@ const usersSchema = new mongoose.Schema({
 
     role: {
         type: String,
-        default: false,
+        default: "usuario",
+        enum: ["regular", "premium"],
     }
 });
 

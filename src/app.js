@@ -22,6 +22,9 @@ import './passport.js'
 import passport from 'passport';
 import dotenv from 'dotenv'
 import { logger } from './utils/logger.js';
+import { cpus } from 'os';
+import cluster from 'cluster';
+import { extractFormData } from './middlewares/extractData.middleware.js';
 
 dotenv.config();
 
@@ -94,8 +97,6 @@ app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 app.engine("handlebars", engine());
 
-// 
-
 
 // Ruta Login
 app.post("/api/sessions/login", passport.authenticate('login', {
@@ -104,9 +105,21 @@ app.post("/api/sessions/login", passport.authenticate('login', {
 }));
 
 
+/* if (cluster.isPrimary) {
+  logger.info(`Proceso principal: ${process.pid}`);
+  for (let i = 0; i < 12; i++){
+    cluster.fork();
+  }
+}else {
+ 
+} */
+
+// const numerodeprocesadores = cpus().length;
+// console.log(numerodeprocesadores);
+
 // Rutas para el back
-  
-// Ruta productos
+
+ // Ruta productos
 app.use("/api/products",productsRouter);
 
 // Ruta para carritos
@@ -120,11 +133,11 @@ app.use("/api/sessions", sessionRouter);
 //Ruta admin
 app.use("/admin", adminRouter);
 
-// Ruta chat
-app.use("/chat", chatRouter);
-
 // Ruta views
 app.use("/views", viewsRouter);
+
+// Ruta chat
+app.use("/chat", chatRouter);
 
 // Ruta cookies
 app.use("/cookie", cookieRouter);
@@ -139,7 +152,7 @@ const PORT = config.port;
 
 
 const httpServer = app.listen(PORT, () => {
-  logger.info(`Conectado al puerto ${PORT}`);
+  logger.info(`Conectado al puerto ${PORT} , Processo worker: ${process.pid}`);
 });
 
 const socketServer = new Server(httpServer);
@@ -168,3 +181,4 @@ socketServer.on("connection", (socket) => {
     socketServer.emit("chat", messages);
   });
 });
+

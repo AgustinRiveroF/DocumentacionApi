@@ -1,4 +1,5 @@
 import { usersModel } from "../models/users.model.js";
+import { hashData, compareData,  } from "../../utils/utils.js";
 
 class UsersManager {
     async findById(id) {
@@ -13,6 +14,24 @@ class UsersManager {
         const response = await usersModel.create(obj);
         return response;
     }
+    async resetPassword(email, newPassword) {
+        try {
+            const user = await usersModel.findOne({ email });
+
+            if (!user) {
+                throw new Error("Usuario no encontrado");
+            }
+            const hashedPassword = await hashData(newPassword);
+            user.password = hashedPassword;
+        
+            await user.save();
+
+            return { success: true, message: "Contraseña restablecida exitosamente" };
+        } catch (error) {
+            return { success: false, message: error.message };
+        }
+    }
+      
 }
 
 export const usersManager = new UsersManager();
