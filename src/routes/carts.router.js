@@ -4,6 +4,8 @@ import cartController from "../controllers/carts.controller.js";
 import ticketService from '../services/ticket.service.js';
 import { isAuthenticated } from "../middlewares/autheticate.middleware.js";
 import passport from "passport";
+import { addToCart } from "../middlewares/adminUser.middlewares.js";
+
  
 
 
@@ -16,8 +18,8 @@ router.get("/populated/:cid", cartController.getPopulatedCart);
 
 router.post("/", cartController.createCart);
 router.post('/:cid/purchase', cartController.finalizePurchase);
-router.post("/:cid/products/:pid", cartController.addProductToCart);
-router.post("/:cartId/add-product", cartController.addProductToCartWithId);
+router.post("/:cid/products/:pid", addToCart, cartController.addProductToCart);
+router.post("/:cartId/add-product", addToCart, cartController.addProductToCartWithId);
 
 router.put("/:cid", cartController.updateCart);
 router.put("/:cid/products/:pid", cartController.updateProductQuantity);

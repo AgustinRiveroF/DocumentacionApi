@@ -9,16 +9,14 @@
 
     <div>
         <h1>Detalles del Carrito</h1>
-        <p>Carrito ID: {{cart._id}}</p>
-        {{#if cart.products.length}}
+        <p>Carrito ID: {{cart._doc._id}}</p>
+        {{#if cart._doc.products.length}}
           <ul>
-            {{#each cart.products}}
+            {{#each cart._doc.products}}
               <li>
-                <p>Producto ID: {{this.product._id}}</p>
-                <p>Nombre del Producto: {{this.product.product_name}}</p>
-                <p>Descripción: {{this.product.product_description}}</p>
+                <p>Producto ID: {{this.cart._doc.products.productId}}</p>
+                <p>Nombre del Producto: {{productsName._id}}</p>
                 <p>Precio: {{this.product.product_price}}</p>
-                <p>Cantidad: {{this.quantity}}</p>
               </li>
             {{/each}}
           </ul>

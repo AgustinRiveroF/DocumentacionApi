@@ -1,0 +1,56 @@
+<div class="conteiner">
+    <div class="form-container">
+        <h1>Cambiar Roles</h1>
+        <p>Ingrese el Id del usuario y el rol a cambiar: </p>
+        <form action="/api/users/premium/roles" method="post">
+            <input type="text" name="idUser" id="idUser" placeholder="Ingrese el id del usuario">
+            <input type="text" name="newRole" id="newRole" placeholder="Ingrese el nuevo rol">
+            <input class="button" type="submit" value="Enviar">
+        </form>
+    </div>
+</div>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+    }
+
+    .form-container {
+        display: flex;
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        flex-direction: column;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        width: 25rem;
+    }
+
+    form {
+        display: contents;
+    }
+
+    input {
+        padding: 6px;
+        width: -webkit-fill-available;
+        margin-top: 10px;
+    }
+
+    .button {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+</style>

@@ -13,7 +13,7 @@
 
 <body>
     <header>
-        <h1>Products</h1>
+        <h1>Productos</h1>
     </header>
     {{#if 'admin'}}
     <div class="admin-menu">
@@ -29,7 +29,7 @@
                 <p style="color: rgb(134, 235, 52);">{{loginMessage}}</p>
                 {{/if}}
                 <p>Email: {{user.email}}</p>
-                <p>Rol: {{role}}</p>
+                <p>Rol: {{user.role}}</p>
             </div>
             <div id="logout">
                 <a href="/logout/">Logout</a>
@@ -51,7 +51,6 @@
             <p>${{this._doc.product_price}}</p>
             <button class="add-to-cart" data-id="{{this._doc._id}}" data-user-id="{{user.id}}">Agregar</button>
         </div>
-        
         {{/each}}
     </div>
 
@@ -73,9 +72,22 @@
     </div>
 
     <div id="cart-link">
-        <a href="/api/carts/populated/{{cid}}">
-            <img src="/IMG/62392824-icono-de-carrito-de-compras-icono-de-vector-de-mejor-diseño-plano.jpg"
+        <a href="/api/carts/my-cart">
+            <img class="cart-log"
+                src="/IMG/62392824-icono-de-carrito-de-compras-icono-de-vector-de-mejor-diseño-plano.jpg"
                 alt="Cart Image" width="50" height="50">
+        </a>
+    </div>
+
+    <div class="premium-link">
+        <a href="/api/users/premium">
+            <img class="premium-log" src="/IMG/candado_78370-547.avif" alt="img" width="50" height="50">
+        </a>
+    </div>
+
+    <div class="empresa-link">
+        <a href="">
+            <img class="empresa-log" src="/IMG/soyEmpresa.png" alt="img" width="50" height="50">
         </a>
     </div>
 
@@ -96,33 +108,33 @@
 
     <script>
 
-document.addEventListener('DOMContentLoaded', async () => {
-    const addToCartButtons = document.querySelectorAll('.add-to-cart');
+        document.addEventListener('DOMContentLoaded', async () => {
+            const addToCartButtons = document.querySelectorAll('.add-to-cart');
 
-    addToCartButtons.forEach(button => {
-        button.addEventListener('click', async () => {
-            const productId = button.dataset.id;
-            const cartId = "{{user.cartID}}";
-            console.log('UserID:', cartId);
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', async () => {
+                    const productId = button.dataset.id;
+                    const cartId = "{{user.cartID}}";
+                    console.log('UserID:', cartId);
 
 
-            try {
-                const addToCartResponse = await fetch('/api/carts/' + cartId + '/add-product', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ productId, quantity: 1 })
+                    try {
+                        const addToCartResponse = await fetch('/api/carts/' + cartId + '/add-product', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ productId, quantity: 1 })
+                        });
+
+                        const data = await addToCartResponse.json();
+                        console.log("hola", data);
+                    } catch (error) {
+                        console.log('Error al agregar producto al carrito:', error);
+                    }
                 });
-
-                const data = await addToCartResponse.json();
-                console.log("hola",data);
-            } catch (error) {
-                console.log('Error al agregar producto al carrito:', error);
-            }
+            });
         });
-    });
-});
 
 
 

@@ -25,19 +25,19 @@ const usersSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
-
+    isPremium: {
+        type: Boolean,
+        default: false,
+    },
     cartId: {
         type: mongoose.SchemaTypes.ObjectId,
         ref: 'Carts'
     },
-
     role: {
         type: String,
-        default: "usuario",
-        enum: ["regular", "premium"],
+        default: "regular",
+        enum: ["regular", "premium", "admin", false],
     }
 });
 
-export const usersModel = mongoose.model('Users', usersSchema)
-
-
+export const usersModel = mongoose.model('Users', usersSchema);

@@ -3,6 +3,8 @@ import productsRepository from '../dao/repositories/products.repository.js';
 import { usersModel } from '../dao/models/users.model.js';
 import { usersManager } from '../dao/managers/users.dao.js';
 import { logger } from '../utils/logger.js';
+import { productModel } from '../dao/models/product.model.js';
+
 
 const productsController = {
   getProducts: async (req, res) => {
@@ -93,20 +95,37 @@ const productsController = {
   },
 
   createProduct: async (req, res) => {
+
+    const { role } = req.session.passport.user || {};
+
+    let userRole = req.session.passport.user.role;
+
+
     try {
-      const { first_name, last_name, email } = req.session.user || {};
-      const { product_name, product_price, product_description, stock } = req.body;
 
-      const createProduct = await productsRepository.create({
-        product_name,
-        product_price,
-        stock: 10 ,
-        product_description,
-        createdBy: { first_name, last_name, email },
-      });
+      if (userRole === 'admin' || 'premium' ) {
+
+        const { first_name, last_name, email, owner } = req.session.user || {};
+        const { product_name, product_price, product_description, stock } = req.body;
+
+        const emailDelCreador = req.session.passport.user.email;
+        
+
+        const createProduct = await productsRepository.create({
+          product_name,
+          product_price,
+          stock: 10,
+          product_description,
+          owner: emailDelCreador,
+        });
+
+        logger.info(`Este es el createProduct: ${createProduct}`)
+
+    }
+        return res.render('admin', { Message: 'Producto Agregado' });
+      
 
 
-      return res.render('admin', { Message: 'Producto Agregado' });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
@@ -115,7 +134,7 @@ const productsController = {
   deleteProduct: async (req, res) => {
     try {
       const { productId } = req.params;
-      
+
       //const deletedProduct = await productsService.deleteProduct(productId);
       const deletedProduct = await productsRepository.deleteById(productId);
 
@@ -133,7 +152,7 @@ const productsController = {
   addToCart: async (req, res) => {
     try {
       logger.info('Contenido de req.session.passport:', req.session.passport);
-      
+
       const { pid } = req.params;
       const { user } = req.session.passport;
 

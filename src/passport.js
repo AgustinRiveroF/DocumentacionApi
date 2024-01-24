@@ -69,13 +69,13 @@ passport.use(
           return done(null, false, { message: 'Contraseña no válida' });
         }
         logger.info('6 strategy ')
-        let role = "usuario";
+        //let role = role;
         return done(null, {
           cartID:user.cartId,
           id:user._id,
           last_name: user.last_name,
           email, first_name: user.first_name,
-          role });
+          role: user.role });
         //return done(null, user)
       } catch (error) {
         return done(error);

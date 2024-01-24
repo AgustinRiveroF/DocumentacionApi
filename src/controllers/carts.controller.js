@@ -45,6 +45,9 @@ const cartController = {
       const userId = req.session.passport.user.id;
       logger.info(`${userId}`);
       const cart = await cartsModel.findOne({ userId })  //.populate('products.productId');
+      let productsName = cart.products;
+
+      logger.info(`Esto es productsName:, ${productsName}`)
 
       logger.info(`Contenido del carrito: ${cart}`);
 
@@ -53,8 +56,8 @@ const cartController = {
         return res.status(404).json({ status: 'error', message: 'Cart not found' });
       }
       
-
-      res.json({ cart });
+      res.render('cartsPopulated', {cart})
+      //res.json({ cart });
     } catch (error) {
       console.error('Error getting cart:', error);
       res.status(500).json({ status: 'error', message: 'Internal Server Error' });

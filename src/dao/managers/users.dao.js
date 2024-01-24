@@ -31,6 +31,22 @@ class UsersManager {
             return { success: false, message: error.message };
         }
     }
+    async updateUserRole(userId, newRole) {
+        try {
+          const user = await usersModel.findById(userId);
+      
+          if (!user) {
+            throw new Error('Usuario no encontrado');
+          }
+      
+          user.role = newRole;
+      
+          await user.save();
+
+        } catch (error) {
+          throw new Error(`Errorrr al actualizar el rol del usuario: ${error.message}`);
+        }
+      }
       
 }
 

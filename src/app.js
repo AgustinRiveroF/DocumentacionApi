@@ -22,6 +22,7 @@ import './passport.js'
 import passport from 'passport';
 import dotenv from 'dotenv'
 import { logger } from './utils/logger.js';
+import usersRouter from './routes/users.router.js'
 import { cpus } from 'os';
 import cluster from 'cluster';
 import { extractFormData } from './middlewares/extractData.middleware.js';
@@ -118,6 +119,9 @@ app.post("/api/sessions/login", passport.authenticate('login', {
 // console.log(numerodeprocesadores);
 
 // Rutas para el back
+
+// Ruta para roles
+app.use("/api/users", usersRouter);
 
  // Ruta productos
 app.use("/api/products",productsRouter);

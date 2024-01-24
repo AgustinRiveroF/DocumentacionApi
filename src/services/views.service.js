@@ -1,7 +1,7 @@
 import { logger } from "../utils/logger.js";
 import { transporter } from "../utils/nodemailer.js";
 import { usersManager } from "../dao/managers/users.dao.js";
-import { hashData, generateUniqueToken } from "../utils/utils.js";
+import { hashData, generateUniqueToken, compareData } from "../utils/utils.js";
 import { usersModel } from "../dao/models/users.model.js";
 
 
@@ -77,7 +77,7 @@ const viewsService = {
 
     const codeGenerado = codigo;
 
-    req.session.codeGenerado = codeGenerado; 
+    req.session.codeGenerado = codeGenerado;
     logger.info(codeGenerado);
 
     res.render('recover')
@@ -94,42 +94,42 @@ const viewsService = {
   },
 
   ahorasi: async (req, res) => {
-
     try {
       const { email, newPassword, codeIngresado } = req.body;
-
       const expirationTime = req.session.expirationTime;
-
-      if (Date.now() > parseInt(expirationTime, 10)) {
-          return res.send('El link expiró');
-      }
-
       const codeGenerado = req.session.codeGenerado;
 
-      if (codeIngresado === codeGenerado) {
-
-        if (email && newPassword && codeIngresado) {
-
-          logger.info('Se proporciono un correo, una contraseña y un codigo')
-          logger.info(`El codigo generado: ${codeGenerado} y el codigo ingresado ${codeIngresado}`)
-          const resetResult = await usersManager.resetPassword(email, newPassword);
-
-          if (resetResult.success) {
-            logger.info('Restablecimiento exitoso, redirigiendo a login')
-            return res.render('login');
-          } else {
-            return res.send('Error al restablecer la contraseña');
-          }
-        }
+      if (Date.now() > parseInt(expirationTime, 10)) {
+        return res.send('El link expiró');
       }
-      res.render('signup');
+
+      if (codeIngresado !== codeGenerado) {
+        return res.send('Código incorrecto');
+      }
+
+      const user = await usersManager.findByEmail(email);
+      if (!user) {
+        return res.send('Usuario no encontrado');
+      }
+
+      const isSamePassword = await compareData(newPassword, user.password);
+
+      if (isSamePassword) {
+        return res.send('No puedes usar la misma contraseña');
+      }
+
+      const resetResult = await usersManager.resetPassword(email, newPassword);
+
+      if (resetResult.success) {
+        return res.render('login');
+      } else {
+        return res.send('Error al restablecer la contraseña');
+      }
     } catch (error) {
       console.error('Error al recuperar la contraseña:', error);
       res.status(500).send('Error al recuperar la contraseña');
     }
-
   },
-
 };
 
 export default viewsService;

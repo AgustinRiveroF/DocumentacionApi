@@ -1,6 +1,6 @@
 <div class="container">
     <div class="tittles">
-        <h1>Bienvenido Admin</h1>
+        <h1>Bienvenido</h1>
         <p>¿Qué deseas hacer?</p>
     </div>
 
@@ -36,12 +36,9 @@
             <input type="text" name="newProductDescription" placeholder="Nueva descripción del producto">
             <button class="btn-tres" type="submit">Actualizar Producto</button>
         </form>
-    </div>
-    <div id="logout">
-        <a class="logout-a" href="/logout">Salir</a>
-    </div>
-    <div id="changeRole">
-        <a class="changeRole-a" href="/api/users/premium/change-role">Cambiar Roles</a>
+        <div id="logout">
+            <a class="logout-a" href="/logout">Salir</a>
+        </div>
     </div>
 </div>
 <style>
@@ -136,24 +133,15 @@
         margin-top: 1.4rem;
     }
 
-    
-   #logout {
-        margin-top: 15px;
+    #logout {
+        position: absolute;
+        margin-top: 21rem;
     }
 
-    #changeRole {
-        margin-top: 10px;
-    }
-
-
-    .changeRole-a {
-        text-decoration: none;
-
-    }
-
-    .logout-a {
+    .logout-a{
         text-decoration: none;
     }
+
 </style>
 
 <script>

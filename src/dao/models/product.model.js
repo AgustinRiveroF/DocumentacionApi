@@ -1,22 +1,27 @@
-import mongoose from "mongoose"; 
+import mongoose from "mongoose";
 
 const productSchema = new mongoose.Schema({
-    product_name:{
+    product_name: {
         type: String,
         required: true
     },
-    product_description:{
+    product_description: {
         type: String,
         required: true,
     },
-    product_price:{
+    product_price: {
         type: Number,
         required: true
     },
     stock: {
         type: Number,
         required: true,
+    },
+    owner: {
+        type: String,
+        default: "admin",
+        ref: "Users",
     }
-})
+});
 
-export const productModel = mongoose.model("Product", productSchema)
+export const productModel = mongoose.model("Product", productSchema);
