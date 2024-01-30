@@ -1,28 +1,23 @@
 import express from 'express';
-import productsRouter from './routes/products.router.js'
+import mainRouter from './utils/main.router.js';
 import config from "./dao/config/config.js"
 import { engine } from "express-handlebars";
 import handlebars from 'express-handlebars';
 import { Server } from "socket.io";
 import { __dirname } from "./utils/utils.js";
-import carritosRouter from './routes/carts.router.js';
 import { messageModel } from './dao/models/message.models.js';
-import viewsRouter from "./routes/views.router.js"
 import bodyParser from 'body-parser';
-import sessionRouter from './routes/sessions.router.js'
-import chatRouter from './routes/chat.router.js'
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
-import cookieRouter from './routes/cookie.router.js'
 import fileStore from 'session-file-store';
 import MongoStore from 'connect-mongo';
-import logoutRouter from './routes/logout.router.js';
-import adminRouter from './routes/admin.router.js'
 import './passport.js'
 import passport from 'passport';
 import dotenv from 'dotenv'
 import { logger } from './utils/logger.js';
-import usersRouter from './routes/users.router.js'
+
+
+// Clusterizacion
 import { cpus } from 'os';
 import cluster from 'cluster';
 import { extractFormData } from './middlewares/extractData.middleware.js';
@@ -105,7 +100,7 @@ app.post("/api/sessions/login", passport.authenticate('login', {
   failureRedirect: '/views/signup',
 }));
 
-
+// Cluster
 /* if (cluster.isPrimary) {
   logger.info(`Proceso principal: ${process.pid}`);
   for (let i = 0; i < 12; i++){
@@ -118,36 +113,9 @@ app.post("/api/sessions/login", passport.authenticate('login', {
 // const numerodeprocesadores = cpus().length;
 // console.log(numerodeprocesadores);
 
-// Rutas para el back
 
-// Ruta para roles
-app.use("/api/users", usersRouter);
-
- // Ruta productos
-app.use("/api/products",productsRouter);
-
-// Ruta para carritos
-app.use('/api/carts',carritosRouter);
-
-// Ruta Login
-app.use("/api/sessions", sessionRouter);
-
-// Rutas para el front
-
-//Ruta admin
-app.use("/admin", adminRouter);
-
-// Ruta views
-app.use("/views", viewsRouter);
-
-// Ruta chat
-app.use("/chat", chatRouter);
-
-// Ruta cookies
-app.use("/cookie", cookieRouter);
-
-// Ruta 
-app.use("/logout", logoutRouter);
+// Rutas
+app.use(mainRouter);
 
 
 // Puerto
@@ -156,7 +124,7 @@ const PORT = config.port;
 
 
 const httpServer = app.listen(PORT, () => {
-  logger.info(`Conectado al puerto ${PORT} , Processo worker: ${process.pid}`);
+  logger.info(`Conectado al puerto ${PORT}, Processo worker: ${process.pid}`);
 });
 
 const socketServer = new Server(httpServer);

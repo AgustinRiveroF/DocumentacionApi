@@ -1,0 +1,141 @@
+paths:
+  /api/sessions/get-user:
+    get:
+      summary: Get the session user
+      tags:
+        - Users
+      responses:
+        "200":
+          description: User obtained
+        "500":
+          description: Server error
+        "400":
+          description: Some data is missing
+
+  /api/products:
+    get:
+      summary: Get products
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Product obtained
+        "500":
+          description: Server error
+        "400":
+          description: Some data is missing
+
+    post:
+      summary: Create a new product
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/updateProduct"
+      responses:
+        "201":
+          description: Product created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/products"
+        "500":
+          description: Server error
+        "400":
+          description: Some data is missing
+
+  /api/products/{pid}:
+    get:
+      summary: Get product by ID
+      parameters:
+        - name: pid
+          in: path
+          description: Product identifier
+          required: true
+          schema:
+            type: string
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Product obtained
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/products"
+              example:
+                product_name: Aceite
+                product_description: Aceite de Girasol
+                product_price: 950
+        "500":
+          description: Server error
+        "400":
+          description: Some data is missing
+
+    delete:
+      summary: Delete product by ID
+      parameters:
+        - name: pid
+          in: path
+          description: Product identifier
+          required: true
+          schema:
+            type: string
+      tags:
+        - Products
+      responses:
+        "204":
+          description: Product deleted successfully
+        "500":
+          description: Server error
+        "400":
+          description: Some data is missing
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        age:
+          type: Number
+        email:
+          type: string
+        password:
+          type: string
+      example:
+        product_name: Aceite
+        product_description: Aceite de Girasol
+        product_price: 950
+        stock: 100
+        owner: creator@mail.com
+    products:
+      type: object
+      properties:
+        product_name:
+          type: string
+        product_description:
+          type: string
+        product_price:
+          type: Number
+      example:
+        product_name: Aceite
+        product_description: Aceite de Girasol
+        product_price: 950
+  requestBodies:
+    updateProduct:
+      type: object
+      properties:
+        product_name: string
+        product_description: string
+        product_price: Number
+
+    
