@@ -26,8 +26,8 @@ export default {
 
 mongoose
   .connect(config.mongo_uri)
-  .then(() => logger.info("Conectado a la base de datos"))
-  .catch((error) => logger.error(error)); 
+  .then(() => console.log("Conectado a la base de datos"))
+  .catch((error) => console.error(error)); 
 
 
   

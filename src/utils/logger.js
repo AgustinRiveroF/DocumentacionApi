@@ -1,5 +1,9 @@
-import winston from "winston";
 import config from "../dao/config/config.js";
+import winston from "winston";
+import dotenv from 'dotenv';
+
+
+dotenv.config();
 
 const customLevels = {
     levels: {
@@ -23,7 +27,7 @@ const customLevels = {
 let transports = [];
 
 // Transporte de consola para desarrollo, nivel debug
-if (config.enviroment === 'development') {
+/* if (config.enviroment === 'development') {
     transports.push(new winston.transports.Console({
         level: 'debug',
         format: winston.format.combine(
@@ -31,10 +35,10 @@ if (config.enviroment === 'development') {
             winston.format.simple(),
         )
     }));
-}
+} */
 
 // Transporte de archivo para produccion, nivel error
-if (config.enviroment === 'production') {
+/* if (config.enviroment === 'production') {
     transports.push(new winston.transports.File({
         level: 'error',
         filename: 'errors.log',
@@ -43,7 +47,7 @@ if (config.enviroment === 'production') {
             winston.format.prettyPrint(),
         )
     }));
-}
+} */
 
 // Cambiar de entorno en Enviroment (.env)
 

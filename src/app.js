@@ -124,14 +124,14 @@ const PORT = config.port;
 
 
 const httpServer = app.listen(PORT, () => {
-  logger.info(`Conectado al puerto ${PORT}, Processo worker: ${process.pid}`);
+  console.log(`Conectado al puerto ${PORT}, Processo worker: ${process.pid}`);
 });
 
 const socketServer = new Server(httpServer);
 const messages = [];
 
 socketServer.on("connection", (socket) => {
-  logger.info(`Cliente conectado: ${socket.id}`);
+  console.log(`Cliente conectado: ${socket.id}`);
 
   socket.on("newUser", (user) => {
     socket.broadcast.emit("userConnected", user);
@@ -154,3 +154,4 @@ socketServer.on("connection", (socket) => {
   });
 });
 
+export default app;

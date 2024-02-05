@@ -6,12 +6,14 @@ import { logger } from '../utils/logger.js';
 import { productModel } from '../dao/models/product.model.js';
 
 
+
 const productsController = {
   getProducts: async (req, res) => {
     try {
-      if (!req.session.passport || !req.session.passport.user || !req.session || !req.session.passport.user.email) {
+      /* if (!req.session.passport || !req.session.passport.user || !req.session || !req.session.passport.user.email) {
+        console.log('no hay nadie registrado');
         return res.redirect('/views/login');
-      }
+      } */
 
       const { limit = 12, page = 1, sort, query } = req.query || {};
       const options = {
@@ -95,16 +97,13 @@ const productsController = {
   },
 
   createProduct: async (req, res) => {
-
+    
     const { role } = req.session.passport.user || {};
-
     let userRole = req.session.passport.user.role;
 
-
     try {
-
+      
       if (userRole === 'admin' || 'premium' ) {
-
         const { first_name, last_name, email, owner } = req.session.user || {};
         const { product_name, product_price, product_description, stock } = req.body;
 
@@ -135,7 +134,6 @@ const productsController = {
     try {
       const { productId } = req.params;
 
-      //const deletedProduct = await productsService.deleteProduct(productId);
       const deletedProduct = await productsRepository.deleteById(productId);
 
       if (!deletedProduct) {
