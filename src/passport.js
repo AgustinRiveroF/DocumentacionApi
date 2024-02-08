@@ -56,25 +56,29 @@ passport.use(
           let role = "admin";
           return done(null, { email, role, idAdmin });
         }
-
+        
         const user = await usersManager.findByEmail(email);
         if (!user) {
           logger.info('4 strategy ')
           return done(null, false, { message: 'Usuario no encontrado' });
         }
+        //console.log("User de passport 4 strategy: ",user);
+        
 
-        const isPasswordValid = await compareData(password, user.password);
+        const isPasswordValid = await compareData(password,user.password);
         if (!isPasswordValid) {
           logger.info('5 strategy ')
           return done(null, false, { message: 'Contraseña no válida' });
         }
+
         logger.info('6 strategy ')
         //let role = role;
         return done(null, {
           cartID:user.cartId,
           id:user._id,
           last_name: user.last_name,
-          email, first_name: user.first_name,
+          email, 
+          first_name: user.first_name,
           role: user.role });
         //return done(null, user)
       } catch (error) {
