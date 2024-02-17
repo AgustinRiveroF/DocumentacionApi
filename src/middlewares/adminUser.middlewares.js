@@ -23,7 +23,7 @@ export const isPremium = (req, res, next) => {
   if (req.session.passport.user.role === 'premium') {
     return next(); 
   } else {
-    return res.status(403).json({ message: 'Acceso no autorizado' });
+    return res.render("accessnotauthorize"); //.status(403).json({ message: 'Acceso no autorizado' });
   }
 };
 
@@ -37,7 +37,7 @@ export const isAuthorize = (req, res, next) => {
   if (userRole === 'premium' || userRole === 'admin') {
     return next(); 
   } else {
-    return res.status(403).json({ message: 'Acceso no autorizado' });
+    return res.render("accessnotauthorize"); //.status(403).json({ message: 'Acceso no autorizado' });
   }
 };
 

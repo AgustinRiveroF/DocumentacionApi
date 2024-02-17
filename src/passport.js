@@ -71,15 +71,22 @@ passport.use(
           return done(null, false, { message: 'Contraseña no válida' });
         }
 
+        if(user){
+          const userId = user.id;
+          await usersManager.loginUser(userId);
+          console.log("Este es el userId desde passport: ",userId);
+        }
+
         logger.info('6 strategy ')
         //let role = role;
         return done(null, {
           cartID:user.cartId,
           id:user._id,
           last_name: user.last_name,
-          email, 
           first_name: user.first_name,
-          role: user.role });
+          email, 
+          role: user.role
+         });
         //return done(null, user)
       } catch (error) {
         return done(error);

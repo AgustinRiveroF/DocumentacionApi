@@ -9,7 +9,6 @@ import { usersModel } from "../dao/models/users.model.js";
 const viewsService = {
   renderLogin: (req, res) => {
     if (req.session.user) {
-      logger.info('Redirigiendo desde service');
       return res.redirect('/api/products');
     }
     res.render('login');
@@ -130,6 +129,11 @@ const viewsService = {
       res.status(500).send('Error al recuperar la contraseña');
     }
   },
+
+  documents: (req, res) => {
+    res.render('documents')
+  },
+
 };
 
 export default viewsService;

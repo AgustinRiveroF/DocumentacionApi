@@ -17,6 +17,8 @@ router.get('/recoverPasswordWithEmail', viewsController.recoverPasswordWithEmail
 
 router.post('/recoverPassword', viewsController.recoverPassword);
 
-router.post('/ahorasi', viewsController.ahorasi )
+router.post('/ahorasi', viewsController.ahorasi);
+
+router.get('/documents', viewsController.documents);
 
 export default router;

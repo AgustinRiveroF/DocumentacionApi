@@ -14,8 +14,12 @@ const cartsSchema = new mongoose.Schema({
         ref: 'Product',
         required: true,
       },
-      productName:{
+      product_name:{
         type: String,
+        ref: 'Product'
+      },
+      product_price:{
+        type: Number,
         ref: 'Product'
       },
       quantity: {

@@ -38,31 +38,42 @@ const cartController = {
     }
   },
 
-
   getMyCart: async (req, res) => {
-    
     try {
-      const userId = req.session.passport.user.id;
-      logger.info(`${userId}`);
-      const cart = await cartsModel.findOne({ userId })  //.populate('products.productId');
-      let productsName = cart.products;
+        const userId = req.session.passport.user.id;
+        logger.info(`${userId}`);
+        const cart = await cartsModel.findOne({ userId }).populate('products.productId');
+        let productsName = cart.products;
 
-      logger.info(`Esto es productsName:, ${productsName}`)
+        const cartId = cart._id;
 
-      logger.info(`Contenido del carrito: ${cart}`);
+        const products = cart.products.map(product => {
+            return {
+                productId: product.productId._id,
+                productName: product.productId.product_name,
+                productDescription: product.productId.product_description,
+                productPrice: product.productId.product_price,
+                quantity: product.quantity
+            };
+        });
 
+        const cartFinished = {
+            cartId,
+            products
+        };
 
-      if (!cart) {
-        return res.status(404).json({ status: 'error', message: 'Cart not found' });
-      }
-      
-      res.render('cartsPopulated', {cart})
-      //res.json({ cart });
+        console.log("cartFinished:", cartFinished);
+
+        if (!cart) {
+            return res.status(404).json({ status: 'error', message: 'Cart not found' });
+        }
+
+        res.render('cartsPopulated', { cartFinished });
     } catch (error) {
-      console.error('Error getting cart:', error);
-      res.status(500).json({ status: 'error', message: 'Internal Server Error' });
+        console.error('Error getting cart:', error);
+        res.status(500).json({ status: 'error', message: 'Internal Server Error' });
     }
-  },
+},
 
   getAllCarts: async (req, res) => {
     try {
@@ -79,7 +90,7 @@ const cartController = {
       const userId = req.session.passport.user.id;
 
       const cart = await cartService.createCart(userId);
-      
+
       res.status(201).json({ cart });
     } catch (error) {
       console.error(error);
@@ -116,7 +127,7 @@ const cartController = {
       const cart = await cartService.addProductToCartWithId(cartId, productId, quantity);
       res.status(200).json({ cart });
     } catch (error) {
-      console.error("The error is",error);
+      console.error("The error is", error);
       res.status(500).json({ status: "error", message: error.message });
     }
   },
@@ -200,7 +211,7 @@ const cartController = {
       }
     });
   },
-    
+
 };
 
 

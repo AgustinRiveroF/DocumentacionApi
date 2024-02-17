@@ -32,6 +32,10 @@ const viewsController = {
   ahorasi: (req, res) => {
     viewsService.ahorasi(req, res);
   },
+
+  documents: (req, res) => {
+    viewsService.documents(req, res);
+},
 };
 
 export default viewsController;

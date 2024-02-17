@@ -10,12 +10,7 @@ import { productModel } from '../dao/models/product.model.js';
 const productsController = {
   getProducts: async (req, res) => {
     try {
-      /* if (!req.session.passport || !req.session.passport.user || !req.session || !req.session.passport.user.email) {
-        console.log('no hay nadie registrado');
-        return res.redirect('/views/login');
-      } */
-
-
+      
       const { limit = 12, page = 1, sort, query } = req.query || {};
 
       const options = {
@@ -45,8 +40,6 @@ const productsController = {
       const userRole = (req.query.emails || req.session.passport.user.email) === 'adminCoder@coder.com' ? 'admin' : 'usuario';
       
 
-      console.log("HOLA DE NUEVOOOOOOOOOOOOOOOO", userRole);
-
 
       const userData = {
         cartID,
@@ -65,10 +58,12 @@ const productsController = {
         roles,
       };
 
-      console.log("Este es el userDataTest", userDataTest);
-
-      console.log("Este es el userData:");
-      //logger.info("Este es el userData:", userData);
+      if(userDataTest.cartIDs){
+        console.log('Se inicio un proceso de test');
+        console.log("Este es el userDataTest", userDataTest);
+      }else{
+        console.log("Este es el userData:", userData);
+      }
       
       const isTestingRequest = req.get('X-Testing-Request') === 'true';
 

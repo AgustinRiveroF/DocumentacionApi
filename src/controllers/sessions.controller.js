@@ -84,9 +84,7 @@ const sessionsController = {
 
   login: async (req, res) => {
     let errorMessage = '';
-
     try {
-      const { email, password } = req.body;
 
       const adminUser = sessionService.loginAdmin(email, password);
       if (adminUser) {

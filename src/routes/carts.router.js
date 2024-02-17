@@ -21,11 +21,14 @@ router.post('/:cid/purchase', cartController.finalizePurchase);
 router.post("/:cid/products/:pid", addToCart, cartController.addProductToCart);
 router.post("/:cartId/add-product", addToCart, cartController.addProductToCartWithId);
 
+//router.post("/:cid/products/:pid", cartController.removeProductFromCart);
+
 router.put("/:cid", cartController.updateCart);
 router.put("/:cid/products/:pid", cartController.updateProductQuantity);
 
 router.delete("/:cid", cartController.clearCart);
 router.delete("/:cid/products/:pid", cartController.removeProductFromCart);
+
 
 
 export default router;

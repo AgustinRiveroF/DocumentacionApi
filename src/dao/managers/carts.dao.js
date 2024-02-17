@@ -10,7 +10,7 @@ class CartsManager {
     const response = await cartsModel.create(newCart);
     return response;
   }
-  
+
 
   async findCartById(idCart) {
     try {
@@ -86,9 +86,14 @@ class CartsManager {
         throw new Error("Remove product to cart not found");
       }
 
-      const productIndex = cart.products.findIndex(product => product.product && product.product.toString() === productId);
+      const productIndex = cart.products.findIndex(product => {
+        return product.productId && product.productId.toString() === productId;
+    });
+    
+
 
       if (productIndex === -1) {
+        console.log('Products in cart:', cart.products);
         throw new Error("Product not found in cart");
       }
 
@@ -106,9 +111,9 @@ class CartsManager {
     logger.info('updateCart function called');
     try {
       const productsArray = Array.isArray(products) ? products : [products];
-  
+
       const cart = await cartsModel.findById(cartId);
-  
+
       if (!cart) {
         throw new Error(`Cart with id ${cartId} not found`);
       }
@@ -124,31 +129,31 @@ class CartsManager {
         }
         return isValid;
       });
-      
+
       logger.info(`isProductIdValid: ${isProductIdValid}`);
       logger.info(`cart.products: ${cart.products}`);
-  
+
       if (!isProductIdValid) {
         throw new Error("ProductId is required for all products");
       }
-  
+
       const updatedProducts = productsArray.map(product => ({
         productId: product._id,
         quantity: product.quantity || 1,
       }));
-  
+
       cart.products = updatedProducts;
-  
+
       await cart.save();
-  
+
       logger.info(`Cart after update:${cart}`);
-  
+
       return cart;
     } catch (error) {
       throw new Error(`Error updating cart: ${error.message}`);
     }
   }
-  
+
 
   async getCartById(cartId) {
     try {

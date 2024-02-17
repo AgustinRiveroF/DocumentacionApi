@@ -8,13 +8,69 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="/CSS/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
     <title>Products</title>
 </head>
 
 <body>
     <header>
-        <h1>Productos</h1>
+        <div class="headersContent">
+
+            <div class="titleHomeHeader">
+                <h1 class="tittleHome"><a class="tittleHome" href="http://localhost:8080/api/products">Hamburgueseria</a></h1>
+            </div>
+
+            <div id="cart-link">
+                <a href="/api/carts/my-cart">
+                    <svg class="cart-log" xmlns="http://www.w3.org/2000/svg" width="40" height="30" fill="currentColor"
+                        class="bi bi-cart4" viewBox="0 0 16 16">
+                        <path
+                            d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5M3.14 5l.5 2H5V5zM6 5v2h2V5zm3 0v2h2V5zm3 0v2h1.36l.5-2zm1.11 3H12v2h.61zM11 8H9v2h2zM8 8H6v2h2zM5 8H3.89l.5 2H5zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0m9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0" />
+                    </svg>
+                </a>
+            </div>
+            <div class="premium-link">
+                <a href="/api/users/premium">
+                    <svg class="premium-log" xmlns="http://www.w3.org/2000/svg" width="40" height="30"
+                        fill="currentColor" class="bi bi-lock" viewBox="0 0 16 16">
+                        <path
+                            d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2M5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1" />
+                    </svg>
+                </a>
+
+            </div>
+            {{!-- <div class="empresa-link">
+                <a href="">
+                    <img class="empresa-log" src="/IMG/soyEmpresa.png" alt="img" width="50" height="50">
+                </a>
+            </div> --}}
+            <div class="documents-link">
+                <a href="/views/documents">
+                    <svg class="documents-log" xmlns="http://www.w3.org/2000/svg" width="40" height="30" fill="currentColor"
+                        class="bi bi-file-earmark-arrow-up-fill" viewBox="0 0 16 16">
+                        <path
+                            d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1M6.354 9.854a.5.5 0 0 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 8.707V12.5a.5.5 0 0 1-1 0V8.707z" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+
     </header>
+        <div id="chatContainer">
+            <div id="chat">
+                <div id="chatHeader">
+                    <button id="toggleChat">Chat</button>
+                </div>
+                <div id="chatMessages"></div>
+                <div id="chatForm">
+                    <input type="text" name="message" id="message" placeholder="Envia un mensaje aquí">
+                    <button type="button" id="botonEnviar">Enviar</button>
+                </div>
+            </div>
+        </div>
     {{#if 'admin'}}
     <div class="admin-menu">
         <input type="checkbox" id="admin-toggle">
@@ -49,7 +105,7 @@
             <h3>{{this._doc.product_name}}</h3>
             <p>{{this._doc.product_description}}</p>
             <p>${{this._doc.product_price}}</p>
-            <button class="add-to-cart" data-id="{{this._doc._id}}" data-user-id="{{user.id}}">Agregar</button>
+            <button class="add-to-cart" data-id="{{this._doc._id}}" data-user-id="{{user.id}}">AGREGAR</button>
         </div>
         {{/each}}
     </div>
@@ -71,39 +127,9 @@
         <button id="nextPage">Siguiente</button>
     </div>
 
-    <div id="cart-link">
-        <a href="/api/carts/my-cart">
-            <img class="cart-log"
-                src="/IMG/62392824-icono-de-carrito-de-compras-icono-de-vector-de-mejor-diseño-plano.jpg"
-                alt="Cart Image" width="50" height="50">
-        </a>
-    </div>
-
-    <div class="premium-link">
-        <a href="/api/users/premium">
-            <img class="premium-log" src="/IMG/candado_78370-547.avif" alt="img" width="50" height="50">
-        </a>
-    </div>
-
-    <div class="empresa-link">
-        <a href="">
-            <img class="empresa-log" src="/IMG/soyEmpresa.png" alt="img" width="50" height="50">
-        </a>
-    </div>
-
-    <div id="chatContainer">
-        <div id="chat">
-            <div id="chatHeader">
-                <button id="toggleChat">Chat</button>
-            </div>
-            <div id="chatMessages"></div>
-            <div id="chatForm">
-                <input type="text" name="message" id="message" placeholder="Envia un mensaje aquí">
-                <button type="button" id="botonEnviar">Enviar</button>
-            </div>
-        </div>
-    </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
     <script src="/JS/chat.js"></script>
 
     <script>

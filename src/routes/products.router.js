@@ -4,14 +4,14 @@ import { sessionInfo } from '../middlewares/session.middleware.js';
 
 const router = Router();
 
-router.get('/', productsController.getProducts);
+router.get('/', sessionInfo, productsController.getProducts);
 
-router.get('/:pid', productsController.getProductById);
+router.get('/:pid', sessionInfo, productsController.getProductById);
 
-router.post('/', productsController.createProduct);
+router.post('/', sessionInfo, productsController.createProduct);
 
-router.post('/:pid/add-to-cart', productsController.addToCart);
+router.post('/:pid/add-to-cart', sessionInfo, productsController.addToCart);
 
-router.delete('/:productId', productsController.deleteProduct);
+router.delete('/:productId', sessionInfo, productsController.deleteProduct);
 
 export default router;

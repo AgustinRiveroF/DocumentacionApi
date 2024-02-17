@@ -52,31 +52,6 @@ toggleChatButton.addEventListener("click", () => {
   isChatMinimized = !isChatMinimized;
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-  const viewCartButton = document.getElementById("view-cart");
-
-  viewCartButton.addEventListener("click", async () => {
-    try {
-      const createCartResponse = await fetch(`/api/carts`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({})
-      });
-
-      const { cartId } = await createCartResponse.json();
-      if (cartId) {
-        window.location.href = `/api/carts/populated/${cartId}`;
-      } else {
-        console.error("Error creating cart: Cart ID not received");
-      }
-    } catch (error) {
-      console.error("Error creating cart:", error);
-    }
-  });
-});
-
 
 document.addEventListener('DOMContentLoaded', function () {
   const adminToggle = document.getElementById('admin-toggle');

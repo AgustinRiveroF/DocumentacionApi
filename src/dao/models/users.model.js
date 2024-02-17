@@ -37,7 +37,19 @@ const usersSchema = new mongoose.Schema({
         type: String,
         default: "regular",
         enum: ["regular", "premium", "admin", false],
-    }
+    },
+    documents: {
+        type: [
+            {
+                name: String,
+                reference: String,
+            },
+        ],
+        default:[],
+    },
+    last_connection: {
+        type: String,
+    },
 });
 
 export const usersModel = mongoose.model('Users', usersSchema);

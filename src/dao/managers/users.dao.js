@@ -1,5 +1,6 @@
 import { usersModel } from "../models/users.model.js";
 import { hashData, compareData,  } from "../../utils/utils.js";
+import moment from "moment-timezone";
 
 class UsersManager {
     async findById(id) {
@@ -47,6 +48,44 @@ class UsersManager {
           throw new Error(`Errorrr al actualizar el rol del usuario: ${error.message}`);
         }
       }
+    
+      async updateOne(id, obj) {
+        try {
+            const updatedUser = await usersModel.findByIdAndUpdate(id, obj);
+
+            if (!updatedUser) {
+                throw new Error('Usuario no encontrado');
+            }
+
+            return { success: true, message: "Usuario actualizado exitosamente", user: updatedUser };
+        } catch (error) {
+            return { success: false, message: `Error al actualizar el usuario: ${error.message}` };
+        }
+    }
+
+     async loginUser (userId) {
+        const user = await usersModel.findById(userId);
+
+        if (user) {
+            user.last_connection = "Conectado ahora";
+            await user.save();
+        }
+
+        return user;
+    }
+
+     async logoutUser (userId) {
+        const user = await usersModel.findById(userId);
+
+        if (user) {
+            const argentinaTime = moment().tz("America/Argentina/Buenos_Aires").format("DD-MM-YYYY [T] HH:mm:ss");
+            
+            user.last_connection = argentinaTime;
+            await user.save();
+        }
+
+        return user;
+    }
       
 }
 

@@ -7,23 +7,114 @@
 </head>
 <body>
 
-    <div>
-        <h1>Detalles del Carrito</h1>
-        <p>Carrito ID: {{cart._doc._id}}</p>
-        {{#if cart._doc.products.length}}
-          <ul>
-            {{#each cart._doc.products}}
-              <li>
-                <p>Producto ID: {{this.cart._doc.products.productId}}</p>
-                <p>Nombre del Producto: {{productsName._id}}</p>
-                <p>Precio: {{this.product.product_price}}</p>
-              </li>
-            {{/each}}
-          </ul>
-        {{else}}
-          <p>No hay productos en el carrito.</p>
-        {{/if}}
+    <div class="container">
+        <div class="card">
+          <img src="/IMG/soyEmpresa.png" alt="">
+            <h1>Detalles del Carrito</h1>
+            <p class="cartId">Carrito ID: {{cartFinished.cartId}}</p>
+
+            {{#if cartFinished.products.length}}
+                <ul class="product-list">
+                    {{#each cartFinished.products}}
+                        <li class="product-details">
+                          <form action="/api/carts/65cf0154d244d75830739071/products/{{this.productId}}" method="post">
+                            <p>Producto ID: {{this.productId}}</p>
+                            <p>Nombre del Producto: {{this.productName}}</p>
+                            <p>Descripción: {{this.productDescription}}</p>
+                            <p>Precio: {{this.productPrice}}</p>
+                            <p>Cantidad: {{this.quantity}}</p>
+                            <input type="submit" value="Eliminar">
+                          </form>
+                        </li>
+                    {{/each}}
+                </ul>
+            {{else}}
+                <p class="no-products">No hay productos en el carrito.</p>
+            {{/if}}
+        <a class="finalyPurchase" href="/api/carts/65cf0154d244d75830739071/purchase">Finalizar compra</a>
+        </div>
     </div>
  
+ <style>
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.cartId {
+  text-align: center;
+}
+
+img {
+    display: flex;
+    width: 5rem;
+    margin-left: 20rem;
+}
+.card h1 {
+    color: #333;
+    text-align: center;
+}
+
+.card p {
+    color: #555;
+}
+
+.card ul {
+    list-style: none;
+    padding: 0;
+}
+
+.card li {
+    margin-bottom: 10px;
+}
+
+.no-products {
+    color: #888;
+    font-style: italic;
+}
+
+.product-list {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.product-details {
+    border: 1px solid #5e9b74;
+    margin-left: 20px;
+    border-radius: 5px;
+    font-family: monospace;
+    padding: 8px;
+}
+
+.finalyPurchase{
+  display: block;
+  text-align: center;
+  text-decoration: none;
+}
+
+ </style>
+
+
 </body>
 </html>
