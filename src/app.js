@@ -125,7 +125,7 @@ app.use(mainRouter);
 const PORT = config.port;
 
 
-const httpServer = app.listen('https://entrega-final-production-8405.up.railway.app', () => {
+const httpServer = app.listen(PORT, () => {
   console.log(`Conectado al puerto ${PORT}, Processo worker: ${process.pid}`);
 });
 
