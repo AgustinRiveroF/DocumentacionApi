@@ -109,7 +109,7 @@ const sessionsController = {
       return res.status(500).json({ error });
     }
   },
-
+  //g
   githubAuth: passport.authenticate('github', { scope: ['user:email'] }),
 
 

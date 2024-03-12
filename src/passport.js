@@ -95,7 +95,7 @@ passport.use(
 );
 
 
-// GITHUB
+// GITHUB-
 
 passport.use(
   'github',
