@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="tittles">
+        <h1>Gestion de productos</h1>
+    </div>
+    <div class="form-container">
+        <form action="/api/products" method="post">
+            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor"
+                class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                <path
+                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
+            </svg>
+            <h2>Agregar un Producto</h2>
+            <input type="text" name="product_name" placeholder="Nombre del producto" required>
+            <input type="number" name="product_price" placeholder="Precio del producto" required>
+            <input type="text" name="product_description" placeholder="Descripción del producto" required>
+            <input type="number" name="stock" placeholder="Stock del producto" required>
+            {{#if Message}}
+            <p id="messageParagraph" style="color: red;">{{Message}}</p>
+            {{/if}}
+            <button class="btn-uno" type="submit">Agregar Producto</button>
+        </form>
+
+        <form action="/admin/delete-product" method="post">
+            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor"
+                class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                <path
+                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z" />
+            </svg>
+            <h3>Eliminar un producto</h3>
+            <label for="productId"></label>
+            <input type="text" name="productId" id="productId" placeholder="ID del producto a eliminar" required>
+            <input type="hidden" name="productIdHidden" value="{{productId}}">
+            <button class="btn-dos" type="submit"
+                onclick="return confirm('¿Estás seguro de que quieres eliminar este producto?')">Eliminar
+                Producto</button>
+        </form>
+
+        <form action="/admin/update-product" method="post">
+            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor"
+                class="bi bi-arrow-up-circle-fill" viewBox="0 0 16 16">
+                <path
+                    d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0m-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707z" />
+            </svg>
+            <h4>Actualizar un producto</h4>
+            <input type="text" name="productIdToUpdate" placeholder="ID del producto a actualizar" required>
+            <input type="hidden" name="productId" value="{{productId}}">
+            <input type="text" name="newProductName" placeholder="Nuevo nombre del producto">
+            <input type="number" name="newProductPrice" placeholder="Nuevo precio del producto">
+            <input type="text" name="newProductDescription" placeholder="Nueva descripción del producto">
+            <button class="btn-tres" type="submit">Actualizar Producto</button>
+        </form>
+    </div>
+    <div id="logout">
+        <a class="logout-a" href="/api/products">Volver</a>
+    </div>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e34e98;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        .form-container {
+            display: flex;
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-content: center;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin: 2rem;
+        }
+
+        input {
+            padding: 6px;
+            font-family: monospace;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        h1 {
+            font-size: xxx-large;
+        }
+
+        h2 {
+            font-family: monospace;
+            font-size: large;
+        }
+
+        h3 {
+            font-size: large;
+            font-family: monospace;
+            margin-top: 15px;
+        }
+
+        h4 {
+            font-size: large;
+            font-family: monospace;
+            margin-top: 15px;
+            border: 1px solid #61595b00
+        }
+
+        .tittles {
+            color: #ffff;
+            font-family: fantasy;
+            font-synthesis: none;
+        }
+
+        .btn-uno {
+            margin-top: 2rem;
+            background-color: #e34e98;
+            color: #ffff;
+            padding: 5px;
+            border-radius: 24px;
+            cursor: pointer;
+            border: 1px solid #61595b00
+        }
+
+        .btn-dos {
+            margin-top: 8.8rem;
+            background-color: #e34e98;
+            color: #ffff;
+            padding: 5px;
+            border-radius: 24px;
+            cursor: pointer;
+            border: 1px solid #61595b00
+        }
+
+        .btn-tres {
+            margin-top: 1.4rem;
+            background-color: #e34e98;
+            color: #ffff;
+            padding: 5px;
+            border-radius: 24px;
+            cursor: pointer;
+            border: 1px solid #61595b00
+        }
+
+
+
+        #changeRole {
+            margin-top: 10px;
+        }
+
+        .changeRole-a {
+            text-decoration: none;
+        }
+
+        #logout {
+            margin-top: 3rem;
+        }
+
+        .logout-a {
+            text-decoration: none;
+            color: #ffff;
+        }
+    </style>
+</body>
+
+</html>

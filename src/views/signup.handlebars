@@ -1,67 +1,99 @@
 <div id="formulario">
-<form action="/api/sessions/signup" method="post">
-    <h1>Sing up</h1>
-    <p>First Name </p>
-    <input type="text" name="first_name" id="first_name">
-    <p>Last Name </p>
-    <input type="text" name="last_name" id="last_name">
-    <p>Email</p>
-    <input type="email" name="email" id="email">
-    <p>Password</p>
-    <input type="password" name="password" id="password">
-    <input type="submit" value="Sign Up" id="button" onclick="redirectToLogin()">
-</form>
-<div class="sub-form">
-    <p>Do you already have an account?</p>
-    <button onclick="window.location.href='/views/login'">Login</button>
-    <p>Sign in with GitHub</p>
-    <button onclick="window.location.href='/api/sessions/auth/github'">GITHUB</button>
-</div>
+    <h1 class="tittleHome"><a class="tittleHome" href="/views/signup">Registrarse</a></h1>
+    <form action="/api/sessions/signup" method="post">
+        <p>Nombre </p>
+        <input type="text" name="first_name" id="first_name">
+        <p>Apellido </p>
+        <input type="text" name="last_name" id="last_name">
+        <p>Email</p>
+        <input type="email" name="email" id="email">
+        <p>Contraseña</p>
+        <input type="password" name="password" id="password">
+        <input type="submit" value="Sign Up" id="button" onclick="redirectToLogin()">
+    </form>
+    <div class="sub-form">
+        <h2>¿Ya tienes una cuenta?</h2>
+        <button onclick="window.location.href='/views/login'">Login</button>
+        <h3>Iniciar sesión con GitHub</h3>
+        <button onclick="window.location.href='/api/sessions/auth/github'">GITHUB</button>
+    </div>
 </div>
 <style>
-    body{
-        background-color: #292c3e;
+    body {
+        background-color: #e34e98;
     }
-    form{
+
+    form {
         display: contents;
     }
 
-    p, h1{
-        color: #eaff6a;
-    }
-    input{
-    }
+    p,
+    h1,
+    h3,
+    input,
     button {
-        color: #eaff6a;
-        background-color: #1c1f30;
+        color: #e34e98;
+        font-family: monospace;
+        width: 18rem;
+    }
+
+    .tittleHome {
+        color: #ffff;
+        text-decoration: underline;
+        font-family: fantasy;
+        text-align: center;
+        font-synthesis: none;
+        margin-top: -2rem;
+    }
+
+    h2,
+    h3 {
+        text-align: center;
+        color: #ffff;
+        font-family: fantasy;
+        font-synthesis: none;
+        margin-bottom: 0rem;
+    }
+
+    input {}
+
+    button {
+        color: #ffff;
+        background-color: #e34e98;
         padding-right: 4rem;
         padding-left: 4rem;
+        margin-top: 1.5rem;
         width: 100%;
+        border-radius: 24px;
+        cursor: pointer;
     }
-    #button{
-        margin-top: 1rem;
-        background-color: #1c1f30;
-        color: #eaff6a;
+
+    #button {
+        margin-top: 1.5rem;
+        background-color: #e34e98;
+        color: #ffff;
         padding: 5px;
+        border-radius: 24px;
+        cursor: pointer;
     }
+
     #formulario {
         display: flex;
         align-items: stretch;
         flex-direction: column;
         flex-wrap: wrap;
+        border: 1px solid #61595b00;
         justify-content: space-evenly;
         align-content: center;
-        border: 1px solid black;
         margin-right: 40rem;
         margin-left: 40rem;
-        margin-top: 4rem;
+        margin-top: 5rem;
         border-radius: 5px;
-        background-color: #1c1f30;
+        background-color: #71244a;
         padding-bottom: 5rem;
         padding-top: 5rem;
-        box-shadow: 5px 6px 20px 15px #888888
-}
-
+        box-shadow: 5px 6px 20px 15px #00000091;
+    }
 </style>
 <script>
     function redirectToLogin() {

@@ -67,7 +67,9 @@ class UsersManager {
         const user = await usersModel.findById(userId);
 
         if (user) {
-            user.last_connection = "Conectado ahora";
+            const argentinaTime = moment().tz("America/Argentina/Buenos_Aires").toDate();
+            user.last_connection = argentinaTime;
+            
             await user.save();
         }
 
@@ -78,9 +80,10 @@ class UsersManager {
         const user = await usersModel.findById(userId);
 
         if (user) {
-            const argentinaTime = moment().tz("America/Argentina/Buenos_Aires").format("DD-MM-YYYY [T] HH:mm:ss");
-            
+            //const argentinaTime = moment().tz("America/Argentina/Buenos_Aires").format("DD-MM-YYYY [T] HH:mm:ss");
+            const argentinaTime = moment().tz("America/Argentina/Buenos_Aires").toDate();         
             user.last_connection = argentinaTime;
+            
             await user.save();
         }
 

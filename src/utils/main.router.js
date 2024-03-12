@@ -14,20 +14,18 @@ import { swaaggerSetup } from './swagger.js';
 
 const mainRouter = express.Router();
 
-// Rutas para el back
-mainRouter.use("/api/users", usersRouter);
-mainRouter.use("/api/products", productsRouter);
-mainRouter.use('/api/carts', carritosRouter);
-mainRouter.use("/api/sessions", sessionRouter);
+mainRouter.use("/api/users", usersRouter);          // Usuarios, roles, documentacion;
+mainRouter.use("/api/products", productsRouter);    // Productos;
+mainRouter.use('/api/carts', carritosRouter);       // Obtener eliminar y actualizar carrito's;
+mainRouter.use("/api/sessions", sessionRouter);     // Login, signup, github, callback y current;   
 
-// Rutas para el front
-mainRouter.use("/admin", adminRouter);
-mainRouter.use("/views", viewsRouter);
-mainRouter.use("/chat", chatRouter);
-mainRouter.use("/cookie", cookieRouter);
-mainRouter.use("/logout", logoutRouter);
+mainRouter.use("/admin", adminRouter);              // AdminController, Enviar correo con el producto eliminado;
+mainRouter.use("/views", viewsRouter);              // Login, signup, recoverPassword, documents;
+mainRouter.use("/chat", chatRouter);                // Chat en tiempo real;
+mainRouter.use("/cookie", cookieRouter);            // Obtener cookies;
+mainRouter.use("/logout", logoutRouter);            // Destruir session
 
-// Swagger 
-mainRouter.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaaggerSetup));
+// Swagger                                          //Documentacion swagger
+mainRouter.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaaggerSetup)); 
 
 export default mainRouter;

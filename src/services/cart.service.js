@@ -1,4 +1,5 @@
 import { cartsManager } from '../dao/managers/carts.dao.js';
+import { productManager } from '../dao/managers/product.dao.js';
 import { cartsModel } from '../dao/models/cart.models.js';
 import ticketService from './ticket.service.js';
 
@@ -26,8 +27,8 @@ const cartService = {
     }
   },
 
-  addProductToCartWithId: async (cid, productId, quantity) => {
-    const cart = await cartsManager.addProductToCartWithId(cid, productId, quantity);
+  addProductToCartWithId: async (cid, productId, quantity, product_name, product_description, product_price) => {
+    const cart = await cartsManager.addProductToCartWithId(cid, productId, quantity, product_name, product_description, product_price);
     return cart;
   },
 
@@ -53,41 +54,42 @@ const cartService = {
     await cartsManager.removeProductFromCart(cid, pid);
   },
 
-  processPurchase: async (cart) => {
+  processPurchase: async (cartId) => {
     try {
       const failedProducts = [];
+      const cart = await cartsModel.findById(cartId);
+      const prices = cart.products.product_price;
+      const products = cart.products;
+      
       let totalAmount = 0;
-  
-      for (const cartProduct of cart.products) {
-        const product = cartProduct.product;
+
+      for (const cartProduct of products) {
+        const product = cartProduct.productId;
         const quantity = cartProduct.quantity;
-  
-        if (product && product.stock >= quantity) {
-          product.stock -= quantity;
-          await product.save();
-  
-          const productTotal = product.price * quantity;
+        const price = cartProduct.product_price;
+
+        if (products) {
+
+          const productTotal = price * quantity;
           totalAmount += productTotal;
+
         } else {
           const productIdString = product ? product.toString() : 'undefined';
           failedProducts.push(productIdString);
         }
       }
-  
-
+      
       return { success: true, totalAmount, failedProducts };
     } catch (error) {
       console.error('Error al procesar la compra:', error);
       return { success: false, failedProducts: [], error: 'Internal Server Error' };
     }
   },
-  
-  
 
   async finalizePurchase(cartId) {
     try {
       const cart = await cartsManager.getCartById(cartId);
-      const purchaseResult = await cartService.processPurchase(cart);
+      const purchaseResult = await cartService.processPurchase(cartId);
 
       if (purchaseResult.success) {
         const failedProducts = cart.products.filter((cartProduct) => {
@@ -107,7 +109,7 @@ const cartService = {
       return { success: false, error: 'Internal Server Error' };
     }
   }
-  
+
 };
 
 

@@ -4,10 +4,10 @@
 
 <div class="form-container">
     <form action="/api/users/documents" enctype="multipart/form-data" method="post" onsubmit="return handleSubmit()">
-        ID : <input class="inputId" type="text" name="id" id="id" placeholder="Ingrese su id" required>
-        DNI: <input type="file" name="dni" id="dni" required>
-        ADRESS: <input type="file" name="address" id="address" required>
-        BANK: <input type="file" name="bank" id="bank" required>
+        <p>ID:</p> <input class="inputId" type="text" name="id" id="id" placeholder="Ingrese su id" required>
+        <p>DNI:</p> <input type="file" name="dni" id="dni" required>
+        <p>ADRESS:</p> <input type="file" name="address" id="address" required>
+        <p>BANK:</p> <input type="file" name="bank" id="bank" required>
         <input class="btn-enviar" id="btn-enviar" type="submit" value="Enviar">
     </form>
     <div id="mensaje-exito"></div>
@@ -17,7 +17,7 @@
 <style>
     body {
         font-family: Arial, sans-serif;
-        background-color: #f5f5f5;
+        background-color: #e34e98;
         margin: 0;
         display: flex;
         align-items: center;
@@ -36,7 +36,15 @@
     h1 {
         position: absolute;
         margin-top: -20rem;
-        margin-left: -1rem;
+        color: #fff;
+        font-family: fantasy;
+        text-decoration: underline;
+        font-synthesis: none;
+        margin-left: 10px;
+    }
+
+    p {
+        margin-bottom: -10px;
     }
 
     .form-container {
@@ -73,21 +81,24 @@
 
     .bnt-enviar,
     #btn-enviar {
-        background-color: #8282b5;
-        color: #000;
-        padding: 8px;
-        border: none;
-        border-radius: 4px;
+        margin-top: 2rem;
+        background-color: #e34e98;
+        color: #ffff;
+        padding: 5px;
+        border-radius: 24px;
         cursor: pointer;
+        border: 1px solid #61595b00 cursor: pointer;
     }
 
     .btn-enviar:hover,
     #btn-enviar:hover {
-        background-color: #ddb814;
-        border: none;
-        border-radius: 4px;
+        margin-top: 2rem;
+        background-color: #e34e99c4;
+        color: #ffff;
+        padding: 5px;
+        border-radius: 24px;
         cursor: pointer;
-        padding: 8px;
+        border: 1px solid #61595b00 cursor: pointer;
     }
 
     #mensaje-exito {

@@ -29,18 +29,17 @@ socketClient.on("chat", (messages) => {
       return `<p>${m.name}: ${m.message}</p>`;
     })
     .join(" ");
-  divChats.innerHTML = chat; 
+  divChats.innerHTML = chat;
   divChats.scrollTop = divChats.scrollHeight;
 });
 
 const toggleChatButton = document.getElementById("toggleChat");
 const chatContainer = document.getElementById("chatContainer");
 
-let isChatMinimized = false;
+let isChatMinimized = true;
 
 toggleChatButton.addEventListener("click", () => {
   
-
   if (isChatMinimized) {
     chatContainer.classList.remove("minimized");
     toggleChatButton.innerText = "Chat";

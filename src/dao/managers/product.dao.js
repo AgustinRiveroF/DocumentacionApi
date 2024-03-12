@@ -10,13 +10,25 @@ class ProductManager {
             if (query) {
                 searchOptions.category = query;
             }
+
+            const skipCount = (parseInt(page) - 1) * parseInt(limit);
+
             const products = await productModel
                 .find(searchOptions)
                 .limit(parseInt(limit))
-                .skip((parseInt(page) - 1) * parseInt(limit))
+                .skip(skipCount)
                 .sort(sort)
                 .exec();
 
+            return products;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async findAllNotLimit(options = {}) {
+        try {
+            const products = await productModel.find()
             return products;
         } catch (error) {
             throw error;

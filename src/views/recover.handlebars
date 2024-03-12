@@ -6,55 +6,71 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Recover Password</title>
-  <style>
-    body {
-      background-color: #292c3e;
-      color: #eaff6a;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-    }
-
-    .container {
-      text-align: center;
-      border: 1px solid black;
-      border-radius: 5px;
-      background-color: #1c1f30;
-      padding: 1rem;
-      box-shadow: 5px 6px 20px 15px #888888;
-    }
-
-    h2 {
-      font-weight: 100;
-      font-size: x-large;
-    }
-
-    p {
-      font-size: large;
-      font-weight: 100;
-    }
-
-    input {
-      margin-top: 10px;
-      padding: 8px;
-    }
-
-    button {
-      padding: 8px;
-      background-color: #1c1f30;
-      color: #eaff6a;
-    }
-  </style>
 </head>
 
 <body>
-  <div class="container">
-    <h2>Listo, puedes ir a chequear tu casilla de email para recuperar tu contraseña. <br> Si no lo encuentras verifica la casilla de spam.</h2>
+  <div id="formulario">
+    <p>Listo, puedes ir a chequear tu casilla de email para recuperar tu contraseña.</p>
+    <p> Si no lo encuentras verifica la casilla de spam.</p>
     <p>Enlace de restablecimiento enviado</a></p>
     <button onclick="window.location.href='/views/login'">Volver a login</button>
   </div>
 </body>
+
+<style>
+  body {
+    background-color: #e34e98;
+  }
+
+  #formulario {
+    display: flex;
+    border: 1px solid #61595b00;
+    margin-left: 35rem;
+    margin-top: 12rem;
+    border-radius: 5px;
+    background-color: #71244a;
+    padding-bottom: 3rem;
+    padding-top: 3rem;
+    box-shadow: 5px 6px 20px 15px #00000091;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    width: 35rem;
+  }
+
+  p {
+    font-size: large;
+    font-weight: 100;
+  }
+
+  p,
+  input,
+  button {
+    color: #e34e98;
+    font-family: monospace;
+    width: 18rem;
+  }
+
+  button {
+    color: #ffff;
+    background-color: #e34e98;
+    padding-right: 4rem;
+    padding-left: 4rem;
+    margin-top: 1.5rem;
+    border-radius: 24px;
+    cursor: pointer;
+  }
+
+  #button {
+    margin-top: 1.5rem;
+    background-color: #e34e98;
+    color: #ffff;
+    padding: 5px;
+    border-radius: 24px;
+    cursor: pointer;
+  }
+</style>
 
 </html>

@@ -5,7 +5,7 @@ import { isAdmin , isAuthorize, modifyProduct } from "../middlewares/adminUser.m
 const router = Router();
 
 
-// Endpoints Backend && Endpoint protegidos por roles 
+// Endpoints protegidos por roles 
 
 router.post("/admin/add-product", isAuthorize, modifyProduct, adminController.addProduct);
 router.put("/update-product/:productId", isAuthorize, modifyProduct, adminController.updateProduct);

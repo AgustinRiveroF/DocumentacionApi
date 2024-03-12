@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles de los Pedidos</title>
+</head>
+
+<body>
+    <h1>Detalles de los Pedidos</h1>
+    {{#if ticketData.tickets.length}}
+    {{#each ticketData.tickets}}
+    <form action="/views/admin/orders/delete/{{this._id}}" method="post">
+        <div class="pedidos-grid">
+            <h2><strong>Código de Pedido:</strong> {{this.code}}</h2>
+            <h3><strong>Fecha de Compra:</strong> {{this.purchase_datetime}}</h3>
+            <h4><strong>Monto Total:</strong> ${{this.amount}}</h4>
+            <h5><strong>Comprador:</strong> {{this.buynerTicket}}</h5>
+
+            {{#each this.products}}
+            <strong>Producto:</strong> {{this.product_name}}<br>
+            <strong>Descripción:</strong> {{this.product_description}}<br>
+            <br>
+            {{/each}}
+            <input class="button" type="submit" value="Dar por finalizado">
+        </div>
+    </form>
+    {{/each}}
+    {{else}}
+    <p>No hay órdenes disponibles.</p>
+    {{/if}}
+
+    <div id="logout">
+        <a class="logout-a" href="/api/products">Volver</a>
+    </div>
+
+    <style>
+        body {
+            background-color: #e34e98;
+        }
+
+        h1 {
+            text-align: center;
+            font-family: fantasy;
+            font-synthesis: none;
+            color: #ffff;
+            text-decoration: underline;
+        }
+
+        p {
+            color: #ffff;
+            text-align: center;
+            margin-top: 20%;
+        }
+
+
+        .button {
+            margin-top: 0.5rem;
+            background-color: #e34e98;
+            color: #ffff;
+            padding: 5px;
+            border-radius: 24px;
+            cursor: pointer;
+            text-align: center;
+            margin-left: 12rem;
+        }
+
+        .pedidos-grid {
+            border: 1px dashed black;
+            border-radius: 10px;
+            padding: 10px;
+            margin: 10px;
+            width: calc(33.33% - 20px);
+            box-sizing: border-box;
+            float: left;
+            background-color: #ffff;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .pedidos-grid:hover {
+            transform: scale(1.05);
+        }
+
+        .logout-a {
+            color: #ffff;
+            text-decoration: none;
+            display: ruby-text;
+            top: 2rem;
+            position: absolute;
+            margin-left: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .pedidos-grid {
+                width: calc(50% - 20px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .pedidos-grid {
+                width: 100%;
+            }
+        }
+    </style>
+
+</body>
+
+</html>

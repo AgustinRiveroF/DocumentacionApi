@@ -23,6 +23,7 @@ const sessionService = {
   },
 
   loginAdmin: (email, password) => {
+    console.log("Estoy en sessionsService loginAdmin");
     if (email === 'adminCoder@coder.com' && password === 'adminCod3r123') {
       return { email, role: 'admin' };
     }

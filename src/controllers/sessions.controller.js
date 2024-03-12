@@ -60,10 +60,10 @@ const sessionsController = {
         // NODEMAILER
 
         const mailOptions = {
-          from: 'FastDelivery',
+          from: 'Hamburgueseria',
           to: email,
           subject: `Bienvenido ${first_name} ${last_name}`,
-          html: `<h1>Bienvenido ${first_name}! a Fast Delivery</h1><h2>Tu aventura esta recien comenzando!</h2><h3>Ante todo, gracias por unirte a nosotros</h3><p>Vamos a estar facilitando la manera en la que haces tus compras</p><p>Ya sea<ul><li>Supermercados</li><li>Tiendas</li><li>Restaurantes</li></ul></p><h4>Te invitamos a seguir explorando nuestra app para disfrutar todas nuestras ofertas</h4>`,
+          html: `<h1>Bienvenido a <b>Hamburgueseria</b></h1><h2>Tu aventura esta recien comenzando!</h2><h3>Ante todo, gracias por unirte a nosotros</h3><p>Vamos a estar facilitando la manera en la que haces tus compras. Te invitamos a seguir explorando nuestra app para disfrutar todas nuestras ofertas</p>`,
         };
         await transporter.sendMail(mailOptions);
 
@@ -83,23 +83,26 @@ const sessionsController = {
   },
 
   login: async (req, res) => {
+    console.log("Estoy en sessions login");
     let errorMessage = '';
     try {
-
+      console.log("paso 1");
       const adminUser = sessionService.loginAdmin(email, password);
       if (adminUser) {
         req.session.passport.user = adminUser;
         res.render('admin');
       }
-
+      console.log("paso 2");
       const user = await sessionService.loginUser(email, password);
 
       if (!user) {
         return res.redirect('/views/signup');
       }
-
+      console.log("paso 3");
+      
       req.session.passport.user = user;
       logger.info('Redirigiendo desde sessions controller');
+      console.log("paso 4");
       res.redirect('/api/products');
     } catch (error) {
       console.error('Error en la ruta de login:', error);

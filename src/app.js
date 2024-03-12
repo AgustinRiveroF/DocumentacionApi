@@ -77,6 +77,7 @@ app.use(passport.session());
 
 
 // Handlebars
+
 app.engine(
   "handlebars",
   engine({
@@ -101,6 +102,7 @@ app.post("/api/sessions/login", passport.authenticate('login', {
 }));
 
 // Cluster
+
 /* if (cluster.isPrimary) {
   logger.info(`Proceso principal: ${process.pid}`);
   for (let i = 0; i < 12; i++){
@@ -114,7 +116,7 @@ app.post("/api/sessions/login", passport.authenticate('login', {
 // console.log(numerodeprocesadores);
 
 
-// Rutas
+// Todas las rutas
 app.use(mainRouter);
 
 
@@ -152,6 +154,11 @@ socketServer.on("connection", (socket) => {
     messages.push(infoMessage);
     socketServer.emit("chat", messages);
   });
+
+  socket.on("totalProductsUpdated", (totalProducts) => {
+    socketServer.emit("totalProductsUpdated", totalProducts);
+  });
+  
 });
 
 export default app;

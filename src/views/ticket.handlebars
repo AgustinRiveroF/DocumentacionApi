@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket</title>
+</head>
+
+<body>
+    <div class="container">
+        <img src="/IMG/success.png" alt="">
+        <div class="contenidoTicket">
+            <h1>Tu compra se completo con exito</h1>
+            <h2>Detalles de la compra: </h2>
+            <p>Nro de Orden: {{fetchedTicket._doc.code}}</p>
+            <p>Fecha de compra: {{fetchedTicket._doc.purchase_datetime}}</p>
+            <p>Total de compra: ${{fetchedTicket._doc.amount}}</p>
+        </div>
+    </div>
+
+    <p class="pedidoEncargado">Tu pedido fue encargado con exito y ya lo estamos preparando :) </p>
+
+    <a href="/api/products">Volver al menu</a>
+</body>
+
+<style>
+
+    body {
+        background-color: #e34e98;
+    }
+
+    img {
+        width: 5%;
+        padding-top: 1rem;
+    }
+
+    .container {
+        text-align: center;
+        border: 1px solid black;
+        margin-top: 10rem;
+        margin-left: 32%;
+        margin-right: 32%;
+        border: double;
+        background-color: #ffffff;
+    }
+
+    .contenidoTicket {
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+        justify-content: center;
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    a {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        align-content: center;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+        color: #ffffff;
+        padding-top: 1rem;
+    }
+
+    .pedidoEncargado {
+        text-align: center;
+        color: #ffffff;
+    }
+</style>
+
+</html>

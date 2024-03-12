@@ -8,6 +8,7 @@ import passport from "passport";
 import '../passport.js'
 import { sessionInfo } from "../middlewares/session.middleware.js";
 import { logger } from "../utils/logger.js";
+import { cartsManager } from "../dao/managers/carts.dao.js";
 
 
 function generateUniqueCode() {
@@ -40,40 +41,48 @@ const cartController = {
 
   getMyCart: async (req, res) => {
     try {
-        const userId = req.session.passport.user.id;
-        logger.info(`${userId}`);
-        const cart = await cartsModel.findOne({ userId }).populate('products.productId');
-        let productsName = cart.products;
+      const userId = req.session.passport.user.id;
+      const cart = await cartsModel.findOne({ userId }).populate('products.productId').lean();
 
-        const cartId = cart._id;
+      if (!cart) {
+        return res.status(404).json({ status: 'error', message: 'Cart not found' });
+      }
 
-        const products = cart.products.map(product => {
-            return {
-                productId: product.productId._id,
-                productName: product.productId.product_name,
-                productDescription: product.productId.product_description,
-                productPrice: product.productId.product_price,
-                quantity: product.quantity
-            };
-        });
-
-        const cartFinished = {
-            cartId,
-            products
-        };
-
-        console.log("cartFinished:", cartFinished);
-
-        if (!cart) {
-            return res.status(404).json({ status: 'error', message: 'Cart not found' });
+      const products = cart.products.map(product => {
+        if (product.productId) {
+          return {
+            cartId: cart._id,
+            productId: product.productId._id,
+            productName: product.productId.product_name,
+            productDescription: product.productId.product_description,
+            productPrice: product.productId.product_price,
+            quantity: product.quantity
+          };
+        } else {
+          return {
+            cartId: cart._id,
+            productId: null,
+            productName: 'Product not available',
+            productDescription: 'Product not available',
+            productPrice: 0,
+            quantity: product.quantity
+          };
         }
+      });
 
-        res.render('cartsPopulated', { cartFinished });
+      let totalAmountInCart = products.reduce((total, product) => total + product.productPrice, 0);
+
+      const cartFinished = {
+        cartId: cart._id,
+        products
+      };
+
+      res.render('cartsPopulated', { cartFinished, totalAmountInCart });
     } catch (error) {
-        console.error('Error getting cart:', error);
-        res.status(500).json({ status: 'error', message: 'Internal Server Error' });
+      console.error('Error getting cart:', error);
+      res.status(500).json({ status: 'error', message: 'Internal Server Error' });
     }
-},
+  },
 
   getAllCarts: async (req, res) => {
     try {
@@ -110,11 +119,13 @@ const cartController = {
   },
 
   addProductToCartWithId: async (req, res) => {
+    console.log("Esto es el req.body: ", req.body);
     try {
       const { cartId } = req.params;
-      const { productId, quantity } = req.body;
+      const { productId, quantity, product_name, product_price, product_description } = req.body;
 
-      logger.info(`Producto agregado: cartId: ${cartId}, productId: ${productId}, quantity: ${quantity}`);
+
+      logger.info(`Producto agregado: cartId: ${cartId}, productId: ${productId}, product_name: ${product_name}, product_price: ${product_price} ,quantity: ${quantity}`);
 
       if (!cartId) {
         return res.status(400).json({ status: 'error', message: 'Cart ID is required in controllers' });
@@ -124,7 +135,7 @@ const cartController = {
         return res.status(400).json({ status: 'error', message: 'The product ID is required' });
       }
 
-      const cart = await cartService.addProductToCartWithId(cartId, productId, quantity);
+      const cart = await cartService.addProductToCartWithId(cartId, productId, quantity, product_name, product_description, product_price);
       res.status(200).json({ cart });
     } catch (error) {
       console.error("The error is", error);
@@ -171,7 +182,8 @@ const cartController = {
     try {
       const { cid, pid } = req.params;
       await cartService.removeProductFromCart(cid, pid);
-      res.status(200).json({ message: "Product removed from cart" });
+      res.redirect('/api/carts/my-cart')
+      //res.status(200).json({ message: "Product removed from cart" });
     } catch (error) {
       console.error(error);
       res.status(500).json({ status: "error", message: error.message });
@@ -182,15 +194,21 @@ const cartController = {
   finalizePurchase: async (req, res) => {
 
     sessionInfo(req, res, async () => {
+      const { id } = req.session.passport.user;
+      const userId = id;
       try {
         const cartId = req.params.cid;
-
+        const cart = await cartsManager.findCartById(cartId);
         const purchaseResult = await cartService.finalizePurchase(cartId);
+
+        const productsInCart = cart.products.product_name;
+
+        console.log("Esto es productsInCart: ", productsInCart);
 
         if (purchaseResult.success) {
           const purchaser = generateUniqueCode();
 
-          const userId = res.locals.userId;
+          const userId = req.session.passport.user.id;
 
           const ticketData = {
             code: generateUniqueCode(),
@@ -198,10 +216,26 @@ const cartController = {
             amount: purchaseResult.totalAmount,
             purchaser,
             userId,
+            products: [],
           };
 
-          const ticket = await ticketService.createTicket(ticketData);
-          res.json({ success: true, ticket });
+          for (const product of cart.products) {
+            const productInfo = await productModel.findById(product.productId).exec();
+
+            ticketData.products.push({
+              productId: product.productId,
+              quantity: product.quantity,
+              product_name: productInfo.product_name,
+              product_description: productInfo.product_description,
+              product_price: productInfo.product_price
+            });
+
+          }
+
+          const ticket = await ticketService.createTicket(userId, ticketData);
+          const fetchedTicket = await ticketService.getTicketById(ticket._id);
+
+          res.render('ticket', { success: true, ticket, purchaseResult, cartId, ticketData, fetchedTicket });
         } else {
           res.json({ success: false, failedProducts: purchaseResult.failedProducts });
         }

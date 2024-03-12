@@ -24,7 +24,7 @@ export function generateUniqueToken() {
     .split('')
     .map(char => String.fromCharCode(parseInt(char, 16) % 10 + 48))
     .join('')
-    .slice(0, 6); // Tomar solo los primeros 6 caracteres
+    .slice(0, 6);
 
   return token;
 }

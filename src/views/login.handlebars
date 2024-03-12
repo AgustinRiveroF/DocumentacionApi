@@ -1,28 +1,29 @@
 <div id="formulario">
+    <img id="ecommerceLog" src="/IMG/soyempresa.png" alt="ecommerce">
+    <h1 class="tittleHome"><a class="tittleHome" href="/views/login">Hamburgueseria</a></h1>
     <form action="/api/sessions/login" method="post">
-        <h1>Log in</h1>
         <p>Email</p>
-        <input type="email" name="email" id="email" autocomplete="email">
-        <p>Password</p>
+        <input type="email" name="email" id="email" autocomplete="email" placeholder="Email" required>
+        <p>Contraseña</p>
         {{#if errorMessage}}
         <p id="messageParagraph" style="color: red;">{{errorMessage}}</p>
         {{/if}}
-        <input type="password" name="password" id="password">
-        <input type="submit" value="Login" id="button">
+        <input type="password" name="password" id="password" placeholder="Contraseña" required>
+        <input type="submit" value="Ingresar" id="button">
     </form>
     <div class="sub-form">
         <button onclick="window.location.href='/api/sessions/auth/github'">GITHUB</button>
-        <p>Do not you have an account yet?</p>
-        <button onclick="window.location.href='/views/signup'">Check in</button>
+        <h3>¿Aún no tienes una cuenta?</h3>
+        <button onclick="window.location.href='/views/signup'">Registrarse</button>
     </div>
     <div id="recoverPassword">
-        <button onclick="window.location.href='/views/forgottenPassword'">Forgot your password?</button>
+        <button onclick="window.location.href='/views/forgottenPassword'">¿Olvidaste tu contraseña?</button>
     </div>
 </div>
 
 <style>
     body {
-        background-color: #292c3e;
+        background-color: #e34e98;
     }
 
     form {
@@ -30,26 +31,57 @@
     }
 
     p,
-    h1 {
-        color: #eaff6a;
+    h1,
+    h3,
+    input,
+    button {
+        color: #e34e98;
+        font-family: monospace;
+    }
+
+    #ecommerceLog {
+        width: 20%;
+        align-self: center;
+        margin-top: -2rem;
+    }
+
+    h3 {
+        text-align: center;
+        color: #ffff;
+        font-family: fantasy;
+        font-synthesis: none;
+        margin-bottom: 0rem;
+        margin-top: 2rem;
+    }
+
+    .tittleHome {
+        color: #ffff;
+        text-decoration: underline;
+        font-family: fantasy;
+        text-align: center;
+        font-synthesis: none;
     }
 
     input {}
 
     button {
-        color: #eaff6a;
-        background-color: #1c1f30;
+        color: #ffff;
+        background-color: #e34e98;
         padding-right: 4rem;
         padding-left: 4rem;
         margin-top: 1.5rem;
         width: 100%;
+        border-radius: 24px;
+        cursor: pointer;
     }
 
     #button {
         margin-top: 1.5rem;
-        background-color: #1c1f30;
-        color: #eaff6a;
+        background-color: #e34e98;
+        color: #ffff;
         padding: 5px;
+        border-radius: 24px;
+        cursor: pointer;
     }
 
     #formulario {
@@ -57,17 +89,17 @@
         align-items: stretch;
         flex-direction: column;
         flex-wrap: wrap;
+        border: 1px solid #61595b00;
         justify-content: space-evenly;
         align-content: center;
-        border: 1px solid black;
         margin-right: 40rem;
         margin-left: 40rem;
-        margin-top: 8rem;
+        margin-top: 5rem;
         border-radius: 5px;
-        background-color: #1c1f30;
+        background-color: #71244a;
         padding-bottom: 5rem;
         padding-top: 5rem;
-        box-shadow: 5px 6px 20px 15px #888888;
+        box-shadow: 5px 6px 20px 15px #00000091;
     }
 </style>
 <script>

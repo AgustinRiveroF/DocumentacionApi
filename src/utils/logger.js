@@ -27,7 +27,7 @@ const customLevels = {
 let transports = [];
 
 // Transporte de consola para desarrollo, nivel debug
-/* if (config.enviroment === 'development') {
+if (config.enviroment === 'development') {
     transports.push(new winston.transports.Console({
         level: 'debug',
         format: winston.format.combine(
@@ -35,10 +35,10 @@ let transports = [];
             winston.format.simple(),
         )
     }));
-} */
+} 
 
 // Transporte de archivo para produccion, nivel error
-/* if (config.enviroment === 'production') {
+if (config.enviroment === 'production') {
     transports.push(new winston.transports.File({
         level: 'error',
         filename: 'errors.log',
@@ -47,7 +47,7 @@ let transports = [];
             winston.format.prettyPrint(),
         )
     }));
-} */
+}
 
 // Cambiar de entorno en Enviroment (.env)
 

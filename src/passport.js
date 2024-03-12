@@ -7,6 +7,8 @@ import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as GithubStrategy } from "passport-github2";
 import { compareData, hashData } from "./utils/utils.js";
 import { logger } from "./utils/logger.js";
+import { cartsManager } from "./dao/managers/carts.dao.js";
+import { cartsModel } from "./dao/models/cart.models.js";
 
 
 // LOCAL
@@ -51,19 +53,18 @@ passport.use(
 
       try {
         logger.info('3 strategy ')
-        const idAdmin = "123"
+        const idAdmin = "65d06bf5f18bf2c9583d5475"
         if (email === "adminCoder@coder.com" && password === "adminCod3r123") {
           let role = "admin";
-          return done(null, { email, role, idAdmin });
+          const cartID = "65d06bf6f18bf2c9583d5477"
+          return done(null, { email, role, idAdmin, cartID });
         }
         
         const user = await usersManager.findByEmail(email);
         if (!user) {
           logger.info('4 strategy ')
           return done(null, false, { message: 'Usuario no encontrado' });
-        }
-        //console.log("User de passport 4 strategy: ",user);
-        
+        }        
 
         const isPasswordValid = await compareData(password,user.password);
         if (!isPasswordValid) {
@@ -74,11 +75,10 @@ passport.use(
         if(user){
           const userId = user.id;
           await usersManager.loginUser(userId);
-          console.log("Este es el userId desde passport: ",userId);
         }
 
         logger.info('6 strategy ')
-        //let role = role;
+        
         return done(null, {
           cartID:user.cartId,
           id:user._id,
@@ -87,7 +87,6 @@ passport.use(
           email, 
           role: user.role
          });
-        //return done(null, user)
       } catch (error) {
         return done(error);
       }
@@ -109,12 +108,7 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        //logger.info('Paso 1: GitHub strategy called');
-
-        //const userDB = await usersManager.findByEmail(profile.emails[0].value);
-
         const userDB = await usersManager.findByEmail(profile._json.email);
-
 
         if (userDB) {
           if (userDB.isGithub) {
@@ -128,13 +122,26 @@ passport.use(
           first_name: profile._json.name.split(' ')[0],
           last_name: profile._json.name.split(' ')[1],
           email: profile._json.email,
-          password: "ads12c1h%/123DS13*çs",
+          password: "ads12c1h%/123DS13*çsñ1ñsdñ1cñz4rñ",
           isGithub: true,
-          cartID: new ObjectId(),
+          cartId: new ObjectId(),
         };
 
+        const email = profile._json.email;
+
         const createdUser = await usersManager.createOne(infoUser);
-        return done(null, createdUser);
+        const user = await usersManager.findByEmail(email);
+        
+        //const cartExisting = user.cartId;
+        //const idByUserCreated = createdUser._id;
+        //const createdCart = await cartsManager.createCart(idByUserCreated)
+
+        const createdCart = await cartsModel.create({ userId: user._id, products: [] });
+        user.cartId = createdCart._id;
+        await user.save();
+        const cartID = user.cartId;
+
+        return done(null, createdUser, createdCart, cartID);
       } catch (error) {
         console.error('Error en la estrategia de GitHub:', error);
         return done(error);
@@ -145,30 +152,12 @@ passport.use(
 
 // PASSPORT GOOGLE
 
-
-
-
-
-
 // SERIALIZE && DESERIALIZE
-
-/* passport.serializeUser((user, done) => {
-  logger.info('Serialize User:', user);
-  const idAdmin = "123"
-  done(null, {
-    cartID: user.cartID ? user.cartID.toString() : undefined,  La que funciona
-    id: user.id || idAdmin,
-    email: user.email, 
-    first_name: user.first_name, 
-    last_name: user.last_name,  
-    role: user.role 
-  });
-}); */
 
 
 passport.serializeUser((user, done) => {
   logger.warning('Serialize User:', user);
-  const idAdmin = "123"
+  const idAdmin = "65d06bf5f18bf2c9583d5475"
   const serializedUser = {
     id: user.id || idAdmin,
     email: user.email, 
@@ -189,7 +178,7 @@ passport.deserializeUser(async (serializedUser, done) => {
   //logger.info('Deserialize User:', serializedUser);
   try {
     const foundUser = await usersManager.findByEmail(serializedUser.email);
-    const idAdmin = "123";
+    const idAdmin = "65d06bf5f18bf2c9583d5475";
     if (!foundUser || !foundUser.cartID) {
       return done(null, idAdmin || foundUser.id );
     }

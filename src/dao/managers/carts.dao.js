@@ -11,6 +11,19 @@ class CartsManager {
     return response;
   }
 
+  async findCartByUser(userId) {
+    try {
+      const cart = await cartsModel.findOne({ userId }).populate('products.product');
+
+      if (!cart) {
+        throw new Error(`Cart for user with ID ${userId} not found`);
+      }
+
+      return cart;
+    } catch (error) {
+      throw new Error(`Error finding cart by user: ${error.message}`);
+    }
+  }
 
   async findCartById(idCart) {
     try {
@@ -21,7 +34,7 @@ class CartsManager {
     }
   }
 
-  async addProductToCartWithId(cartId, productId, quantity) {
+  async addProductToCartWithId(cartId, productId, quantity, product_name, product_description, product_price) {
     try {
       const cart = await cartsModel.findOne({ _id: cartId });
 
@@ -40,7 +53,7 @@ class CartsManager {
         if (!productId) {
           throw new Error("ProductId is required");
         }
-        cart.products.push({ productId, quantity: quantity });
+        cart.products.push({ productId, quantity: quantity, product_name, product_description, product_price });
       } else {
         cart.products[productIndex].quantity += quantity;
       }
@@ -88,8 +101,8 @@ class CartsManager {
 
       const productIndex = cart.products.findIndex(product => {
         return product.productId && product.productId.toString() === productId;
-    });
-    
+      });
+
 
 
       if (productIndex === -1) {
@@ -121,8 +134,8 @@ class CartsManager {
       const isProductIdValid = productsArray.every(product => {
         const isValid = product._id !== undefined && product._id !== null;
 
-        logger.info(`isValid: ${isValid}`);
-        logger.info(`product: ${product}`);
+        console.log(`isValid: ${isValid}`);
+        console.log(`product: ${product}`);
 
         if (!isValid) {
           console.error(`Invalid productId for product: ${JSON.stringify(product)}`);
@@ -142,7 +155,7 @@ class CartsManager {
         quantity: product.quantity || 1,
       }));
 
-      cart.products = updatedProducts;
+      cart.products = [];
 
       await cart.save();
 
