@@ -141,7 +141,7 @@
 
         document.addEventListener('DOMContentLoaded', async () => {
             const addToCartButtons = document.querySelectorAll('.add-to-cart');
-            const socket = io.connect('http://localhost:8080/');
+            const socket = io.connect('https://entrega-final-production-8405.up.railway.app/api/products');
 
 
             addToCartButtons.forEach(button => {

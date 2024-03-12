@@ -33,7 +33,7 @@ const viewsController = {
 
   forgottenPassword: async (req, res) => {
     const { email } = req.body
-    const resetLink = `http://localhost:8080/views/recoverPasswordWithEmail`;
+    const resetLink = `https://entrega-final-production-8405.up.railway.app/views/recoverPasswordWithEmail`;
 
     res.render('forgottenPassword');
 
@@ -58,7 +58,7 @@ const viewsController = {
 
     req.session.expirationTime = expirationTime;
 
-    const resetLink = `http://localhost:8080/views/recoverPasswordWithEmail?email=${email}&codigo=${codigo}`;
+    const resetLink = `https://entrega-final-production-8405.up.railway.app/views/recoverPasswordWithEmail?email=${email}&codigo=${codigo}`;
 
     const mailOptions = {
       from: 'FastDelivery',
