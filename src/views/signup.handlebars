@@ -2,13 +2,13 @@
     <h1 class="tittleHome"><a class="tittleHome" href="/views/signup">Registrarse</a></h1>
     <form action="/api/sessions/signup" method="post">
         <p>Nombre </p>
-        <input type="text" name="first_name" id="first_name">
+        <input type="text" name="first_name" id="first_name" required>
         <p>Apellido </p>
-        <input type="text" name="last_name" id="last_name">
+        <input type="text" name="last_name" id="last_name" required>
         <p>Email</p>
-        <input type="email" name="email" id="email">
+        <input type="email" name="email" id="email" required>
         <p>Contraseña</p>
-        <input type="password" name="password" id="password">
+        <input type="password" name="password" id="password" required>
         <input type="submit" value="Sign Up" id="button" onclick="redirectToLogin()">
     </form>
     <div class="sub-form">
